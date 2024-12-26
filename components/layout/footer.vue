@@ -15,23 +15,21 @@ const links = ref([
   {
     name: 'Datenschutz',
     to: { name: 'privacy' },
-  }
+  },
 ]);
+
+const runtimeConfig = useRuntimeConfig();
 </script>
 
 <template>
   <footer class="footer">
     <div class="has-text-centered">
-      <p class="content">© 2024 Alex Spielwelt</p>
+      <p class="content">© 2024 {{ runtimeConfig.public.name }}</p>
       <span>Folge mir gerne auf </span>
-      <span class="mr-2">
-        <font-awesome-icon icon="fa-brands fa-instagram" /> Instagram
-      </span>
+      <span class="mr-2"> <font-awesome-icon icon="fa-brands fa-instagram" /> Instagram </span>
       <span class="mr-1">oder</span>
-      <span class="mr-1">
-        <font-awesome-icon icon="fa-brands fa-threads" /> Threads
-      </span>
-      <span>@alexspielwelt – ich freue mich auf dich!</span>
+      <span class="mr-1"> <font-awesome-icon icon="fa-brands fa-threads" /> Threads </span>
+      <span>{{ runtimeConfig.public.instagram }} – ich freue mich auf dich!</span>
       <p class="content">
         <span v-for="(link, index) in links" :key="'footer-link' + index">
           <nuxt-link :to="link.to">{{ link.name }}</nuxt-link>
