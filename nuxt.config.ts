@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   plugins: [
     { src: '~/plugins/storage.ts', mode: 'client' }, // Ensure mode is 'client'
   ],
+  build: {
+    transpile: ['@fortawesome/vue-fontawesome']
+  },
   runtimeConfig: {
     // The private keys which are only available server-side
     apiBase: 'https://localhost:3001',
