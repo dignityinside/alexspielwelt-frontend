@@ -24,10 +24,12 @@ interface Game {
   metaTitle?: string;
   metaDescription?: string;
 }
+
 interface GameStore {
   items: Game[];
   item: Game | null;
 }
+
 export const useGamesStore = defineStore('games', {
   state: (): GameStore => ({ items: [], item: null }),
   actions: {
@@ -41,6 +43,6 @@ export const useGamesStore = defineStore('games', {
   getters: {
     gamesCount: (state): number => state.items.length,
     games: (state): Game[] => state.items,
-    game: (state): Game => state.item,
+    game: (state): Game | null => state.item,
   },
 });

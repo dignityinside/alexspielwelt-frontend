@@ -1,21 +1,35 @@
 <script setup lang="ts">
-const router = useRouter()
+const router = useRouter();
+const usersStore = useUsersStore();
 
 interface Item {
-  name: string
-  to: string
+  name: string;
+  to: string;
 }
 
 defineProps<{
-  items: Item[]
-}>()
+  items: Item[];
+}>();
 
+// Logout user
 async function logoutUser() {
-  // TODO add logout
-  router.push({ name: 'login' })
+  const { $storage } = useNuxtApp();
+
+  // Delete user and token from LocalStorage
+  if ($storage) {
+    $storage.removeItem('user');
+    $storage.removeItem('token');
+  }
+
+  // Unset user and token in Store
+  await usersStore.logoutUser();
+
+  // Redirect user to login page
+  await router.push({ name: 'login' });
 }
 
-const isOpen = ref(false)
+// Initial value for navigation (relevant only mobile)
+const isOpen = ref(false);
 </script>
 
 <template>
@@ -23,12 +37,12 @@ const isOpen = ref(false)
     <div class="container">
       <div class="navbar-brand">
         <a
-            role="button"
-            class="navbar-burger"
-            aria-label="menu"
-            data-target="burgerNavigation"
-            :aria-expanded="false"
-            @click="isOpen = !isOpen"
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          data-target="burgerNavigation"
+          :aria-expanded="false"
+          @click="isOpen = !isOpen"
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>

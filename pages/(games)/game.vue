@@ -5,7 +5,8 @@ definePageMeta({
 });
 
 import { useFetch } from '#app';
-import { useGamesStore } from '~/store/useGamesStore';
+
+// Init config, store and route
 
 const runtimeConfig = useRuntimeConfig();
 const gamesStore = useGamesStore();

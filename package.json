@@ -18,9 +18,11 @@
     "bulma": "^1.0.2",
     "nuxt": "^3.15.0",
     "pinia": "^2.3.0",
+    "vee-validate": "^4.15.0",
     "vue": "latest",
     "vue-dompurify-html": "^5.2.0",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "prettier": "^3.4.2"

@@ -2,14 +2,24 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       storage: {
-        getItem(item: string) {
+        getItem: (name: string, toArray = false, storage = localStorage) => {
           if (import.meta.client) {
-            return localStorage.getItem(item);
+            return toArray ? JSON.parse(storage.getItem(name)) : storage.getItem(name);
           }
         },
-        setItem(item: string, value: string) {
+        setItem: (name: string, data: string, stringify = false, storage = localStorage) => {
           if (import.meta.client) {
-            return localStorage.setItem(item, value);
+            storage.setItem(name, stringify ? JSON.stringify(data) : data);
+          }
+        },
+        removeItem: (name: string, storage = localStorage) => {
+          if (import.meta.client) {
+            storage.removeItem(name);
+          }
+        },
+        clearItems: (storage = localStorage) => {
+          if (import.meta.client && storage.length) {
+            storage.clear();
           }
         },
       },

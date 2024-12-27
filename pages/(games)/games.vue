@@ -10,7 +10,8 @@ useSeoMeta({
 });
 
 import { useFetch } from '#app';
-import { useGamesStore } from '~/store/useGamesStore';
+
+// Init config, store and router
 
 const runtimeConfig = useRuntimeConfig();
 const gamesStore = useGamesStore();

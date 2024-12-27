@@ -9,7 +9,18 @@ export default defineNuxtConfig({
 
   css: ['@/assets/global.css'],
 
-  modules: ['@pinia/nuxt'],
+  modules: [
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
+      },
+    ],
+  ],
+
+  imports: {
+    dirs: ['stores'],
+  },
 
   plugins: [
     {
@@ -34,6 +45,4 @@ export default defineNuxtConfig({
       email: 'mustermann@example.com',
     },
   },
-
-  modules: ['@pinia/nuxt'],
 });
