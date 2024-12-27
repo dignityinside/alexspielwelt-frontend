@@ -21,27 +21,33 @@ const {
   error,
 } = useFetch(`/games/${slug}`, {
   baseURL: runtimeConfig.public.baseURL,
+  immediate: true,
 });
 
 // Save data in store
 
-const { setGame } = useGamesStore();
-setGame(item);
+if (item) {
+  gamesStore.setGame(item);
+}
 
-const game = computed(() => {
-  return gamesStore.game;
-});
+const game = computed(() => gamesStore.game);
 
-// Set meta title & description
+// Watch for changes in the game and update meta tags dynamically
 
-onMounted(() => {
-  if (game && game.value?.metaTitle && game.value?.metaDescription) {
-    useSeoMeta({
-      title: game.value.metaTitle,
-      description: game.value.metaDescription,
-    });
-  }
-});
+watch(
+  game,
+  (newGame) => {
+    if (newGame?.metaTitle && newGame?.metaDescription) {
+      useSeoMeta({
+        title: newGame.metaTitle,
+        description: newGame.metaDescription,
+      });
+    }
+  },
+  { immediate: true },
+);
+
+// Function to handle external link clicks
 
 function onLinkClick(link: string) {
   window.open(link, '_blank');
@@ -145,6 +151,6 @@ function onLinkClick(link: string) {
       </div>
     </div>
 
-    <p v-if="status === 'success' && (!item || item.length === 0)">Keine Posts verfügbar.</p>
+    <p v-if="status === 'success' && (!item || item.length === 0)">Spiel nicht verfügbar.</p>
   </div>
 </template>

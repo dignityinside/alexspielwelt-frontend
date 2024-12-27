@@ -20,7 +20,7 @@ const router = useRouter();
 
 const {
   data: items,
-  pending,
+  status,
   error,
 } = useFetch('/games', {
   baseURL: runtimeConfig.public.baseURL,
@@ -28,20 +28,22 @@ const {
 
 // Save data in store
 
-gamesStore.setGames(items);
+if (items) {
+  gamesStore.setGames(items);
+}
 
 const openGame = (slug: string) => {
-  router.push({ name: 'game', params: { slug: slug } });
+  router.push({ name: 'game', params: { slug } });
 };
 </script>
 
 <template>
   <div>
-    <div v-if="pending">Lädt...</div>
+    <div v-if="status === 'pending'">Lädt...</div>
 
-    <div v-else-if="error">Fehler: {{ error.message }}</div>
+    <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
 
-    <div v-else>
+    <div v-if="status === 'success' && items">
       <template v-if="gamesStore.gamesCount">
         <section class="section is-medium has-text-centered">
           <h1 class="title">#Spieltipps</h1>
@@ -61,6 +63,8 @@ const openGame = (slug: string) => {
         </div>
       </template>
     </div>
+
+    <p v-if="status === 'success' && (!items || items.length === 0)">Keine Spiele verfügbar.</p>
   </div>
 </template>
 
