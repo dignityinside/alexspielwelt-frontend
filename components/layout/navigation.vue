@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const router = useRouter();
 const usersStore = useUsersStore();
 
 interface Item {
@@ -12,21 +11,8 @@ defineProps<{
 }>();
 
 // Logout user
-async function logoutUser() {
-  const { $storage } = useNuxtApp();
-
-  // Delete user and token from LocalStorage
-  if ($storage) {
-    $storage.removeItem('user');
-    $storage.removeItem('token');
-  }
-
-  // Unset user and token in Store
-  await usersStore.logoutUser();
-
-  // Redirect user to login page
-  await router.push({ name: 'login' });
-}
+const { logoutUser } = useLogoutUser();
+const onLogoutUser = () => logoutUser();
 
 // Initial value for navigation (relevant only mobile)
 const isOpen = ref(false);
@@ -66,7 +52,7 @@ const isOpen = ref(false);
               <nuxt-link :to="{ name: 'profile' }" class="navbar-item">
                 <span>Profile</span>
               </nuxt-link>
-              <a class="navbar-item" @click="logoutUser()">
+              <a class="navbar-item" @click="onLogoutUser()">
                 <span>Logout</span>
               </a>
             </div>

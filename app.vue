@@ -6,6 +6,10 @@ const { $storage } = useNuxtApp();
 if ($storage && $storage.getItem('token')) {
   usersStore.setToken($storage.getItem('token'));
 }
+
+if ($storage && $storage.getItem('user')) {
+  usersStore.setUser($storage.getItem('user', true));
+}
 </script>
 
 <template>
