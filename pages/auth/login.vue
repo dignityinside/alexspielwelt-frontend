@@ -13,13 +13,12 @@ import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
 
 // Init router, storage and store
-const router = useRouter();
 const { $storage } = useNuxtApp();
 const usersStore = useUsersStore();
 
 // Redirect when user already logged in
 if ($storage && $storage.getItem('token')) {
-  router.push({ name: 'profile' });
+  navigateTo({ name: 'profile' });
 }
 
 // Form validation rules
@@ -36,8 +35,8 @@ const validationSchema = yup.object({
 
 // Vee-Validate Setup
 const { handleSubmit, errors } = useForm({ validationSchema });
-const { value: username } = useField('username');
-const { value: password } = useField('password');
+const { value: username } = useField<string>('username');
+const { value: password } = useField<string>('password');
 
 // Init values
 const loadingStatus = ref('');
@@ -72,7 +71,7 @@ const onSubmit = handleSubmit(async (values) => {
     }
 
     // Redirect user to profile page
-    router.push({ name: 'profile' });
+    navigateTo({ name: 'profile' });
   }
 });
 </script>

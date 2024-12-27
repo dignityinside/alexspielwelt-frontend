@@ -4,7 +4,7 @@ const usersStore = useUsersStore();
 
 interface Item {
   name: string;
-  to: string;
+  to: { name: string };
 }
 
 defineProps<{

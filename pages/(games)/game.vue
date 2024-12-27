@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { useFetch } from '#app';
+import type { Game } from '~/types';
+
 definePageMeta({
   name: 'game',
   path: '/spieltipps/:slug',
 });
-
-import { useFetch } from '#app';
 
 // Init config, store and route
 
@@ -20,18 +21,18 @@ const {
   data: item,
   status,
   error,
-} = useFetch(`/games/${slug}`, {
+} = useFetch<Game>(`/games/${slug}`, {
   baseURL: runtimeConfig.public.baseURL,
   immediate: true,
 });
 
 // Save data in store
 
-if (item) {
-  gamesStore.setGame(item);
-}
+const game = computed(() => item.value);
 
-const game = computed(() => gamesStore.game);
+if (game.value) {
+  gamesStore.setGame(game.value);
+}
 
 // Watch for changes in the game and update meta tags dynamically
 
@@ -61,7 +62,7 @@ function onLinkClick(link: string) {
 
     <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
 
-    <div v-if="status === 'success' && item">
+    <div v-if="status === 'success' && game">
       <div>
         <section class="section is-small has-text-centered">
           <h1 v-if="game?.title" class="title">#{{ game.title }}</h1>
@@ -152,6 +153,6 @@ function onLinkClick(link: string) {
       </div>
     </div>
 
-    <p v-if="status === 'success' && (!item || item.length === 0)">Spiel nicht verfügbar.</p>
+    <p v-if="status === 'success' && !game">Spiel nicht verfügbar.</p>
   </div>
 </template>

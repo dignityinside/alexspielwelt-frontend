@@ -45,7 +45,7 @@ function togglePasswordVisibility() {
         :class="{ 'is-danger': errorMessage }"
         autocomplete="current-password"
         class="input"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
       <p v-if="errorMessage" class="help is-danger">
         {{ errorMessage }}

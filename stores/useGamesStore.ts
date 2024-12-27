@@ -1,29 +1,5 @@
 import { defineStore } from 'pinia';
-
-interface Game {
-  id: number;
-  title: string;
-  slug?: string;
-  description?: string;
-  slogan?: string;
-  statusId?: number;
-  img: string;
-  link?: string;
-  publisher?: string;
-  releaseYear?: number;
-  players?: string;
-  playTime?: string;
-  genre?: string;
-  categoryId?: number;
-  rating?: number;
-  difficulty?: number;
-  recommendedAge?: string;
-  award?: string;
-  gameDesigner?: string;
-  hits?: number;
-  metaTitle?: string;
-  metaDescription?: string;
-}
+import type { Game } from '~/types';
 
 interface GameStore {
   items: Game[];
@@ -31,7 +7,7 @@ interface GameStore {
 }
 
 export const useGamesStore = defineStore('games', {
-  state: (): GameStore => ({ items: [], item: null }),
+  state: (): GameStore => ({ items: [], item: null as Game | null }),
   actions: {
     setGames(games: Game[]) {
       this.items = games;

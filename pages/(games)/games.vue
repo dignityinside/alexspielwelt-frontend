@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useFetch } from '#app';
+import type { Game } from '~/types';
+
 definePageMeta({
   name: 'games',
   path: '/spieltipps',
@@ -8,8 +11,6 @@ useSeoMeta({
   title: 'Spieltipps',
   description: 'Ich helfe dir, das perfekte Brettspiel zu finden!',
 });
-
-import { useFetch } from '#app';
 
 // Init config, store and router
 
@@ -23,14 +24,17 @@ const {
   data: items,
   status,
   error,
-} = useFetch('/games', {
+} = useFetch<Game[]>('/games', {
   baseURL: runtimeConfig.public.baseURL,
+  immediate: true,
 });
 
 // Save data in store
 
-if (items) {
-  gamesStore.setGames(items);
+const games = computed(() => items.value);
+
+if (games.value) {
+  gamesStore.setGames(games.value);
 }
 
 const openGame = (slug: string) => {
@@ -44,7 +48,7 @@ const openGame = (slug: string) => {
 
     <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
 
-    <div v-if="status === 'success' && items">
+    <div v-if="status === 'success' && games">
       <template v-if="gamesStore.gamesCount">
         <section class="section is-medium has-text-centered">
           <h1 class="title">#Spieltipps</h1>
@@ -53,7 +57,7 @@ const openGame = (slug: string) => {
 
         <div class="columns is-multiline has-text-centered">
           <div
-            v-for="game in gamesStore.games"
+            v-for="game in games"
             :key="game.slug"
             @click="openGame(game.slug)"
             class="game column is-one-fifth"
@@ -65,7 +69,9 @@ const openGame = (slug: string) => {
       </template>
     </div>
 
-    <p v-if="status === 'success' && (!items || items.length === 0)">Keine Spiele verfügbar.</p>
+    <p v-if="status === 'success' && (!games || gamesStore.gamesCount === 0)">
+      Keine Spiele verfügbar.
+    </p>
   </div>
 </template>
 

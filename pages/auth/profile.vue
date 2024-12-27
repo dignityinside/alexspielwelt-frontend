@@ -2,6 +2,7 @@
 definePageMeta({
   name: 'profile',
   path: '/profile',
+  middleware: ['authenticated'],
 });
 
 useSeoMeta({

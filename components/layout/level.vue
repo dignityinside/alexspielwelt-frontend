@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Item {
-  heading: string;
-  title: string;
+  heading: string | number;
+  title: string | number;
   icon?: string;
 }
 

@@ -7,7 +7,7 @@ defineProps({
   type: {
     type: String,
     default: 'text',
-    validator: (value) => ['text', 'password', 'email', 'color', 'hidden'].includes(value),
+    validator: (value: string) => ['text', 'password', 'email', 'color', 'hidden'].includes(value),
   },
   label: {
     type: String,
@@ -24,7 +24,7 @@ defineProps({
   autocomplete: {
     type: String,
     default: 'off',
-    validator: (value) =>
+    validator: (value: string) =>
       ['off', 'email', 'new-password', 'current-password', 'username'].includes(value),
   },
   iconLeft: {
@@ -59,7 +59,7 @@ defineEmits(['update:modelValue']);
         :autocomplete="autocomplete"
         :class="{ 'is-danger': errorMessage }"
         class="input"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
       <p v-if="errorMessage" class="help is-danger">
         {{ errorMessage }}

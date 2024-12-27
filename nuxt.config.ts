@@ -2,37 +2,32 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-
   devServer: {
     port: 3001,
   },
-
+  typescript: {
+    typeCheck: true,
+    strict: false,
+  },
   css: ['@/assets/global.css'],
-
-  modules: [
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
-      },
-    ],
-  ],
-
+  modules: [[
+    '@pinia/nuxt',
+    {
+      autoImports: ['defineStore', 'acceptHMRUpdate'],
+    },
+  ], '@nuxt/eslint'],
   imports: {
     dirs: ['stores'],
   },
-
   plugins: [
     {
       src: '@/plugins/storage.ts',
       mode: 'client',
     },
   ],
-
   build: {
     transpile: ['@fortawesome/vue-fontawesome'],
   },
-
   runtimeConfig: {
     // The private keys which are only available server-side
     // Keys within public are also exposed client-side

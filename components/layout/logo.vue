@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  items: [];
+  items: { heading: string; title: string | number }[];
 }>();
 
 const runtimeConfig = useRuntimeConfig();

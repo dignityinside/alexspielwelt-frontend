@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 defineProps({
   type: {
-    type: String,
+    type: String as PropType<'button' | 'submit' | 'reset'>,
     default: 'submit',
     validator: (value: string) => ['button', 'submit', 'reset'].includes(value),
   },
@@ -20,9 +22,9 @@ defineProps({
     type: String,
     default: 'is-warning',
   },
-})
+});
 
-defineEmits(['click'])
+defineEmits(['click']);
 </script>
 
 <template>
