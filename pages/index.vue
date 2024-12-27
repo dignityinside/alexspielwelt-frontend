@@ -1,14 +1,18 @@
- <script setup lang="ts">
+<script setup lang="ts">
 definePageMeta({
-  title: 'Startseite',
   name: 'home',
-  path: '/'
-})
+  path: '/',
+});
 
-const router = useRouter()
+useSeoMeta({
+  title: 'Alex Spielwelt',
+  description: 'Spiel-Empfehlungen & Einblicke.',
+});
+
+const router = useRouter();
 
 function redirectToGames() {
-  router.push({ name: 'games' })
+  router.push({ name: 'games' });
 }
 </script>
 
@@ -16,11 +20,13 @@ function redirectToGames() {
   <div>
     <section class="section is-medium has-text-centered">
       <h1 class="title">Willkommen!</h1>
-      <h2 class="subtitle">Entdecke die Welt der Brettspiele und finde dein neues Lieblingsspiel.</h2>
+      <h2 class="subtitle">
+        Entdecke die Welt der Brettspiele und finde dein neues Lieblingsspiel.
+      </h2>
       <ui-button
-          text="Jetzt dein nächstes Brettspiel entdecken"
-          layout="is-light is-danger"
-          @click="redirectToGames"
+        text="Jetzt dein nächstes Brettspiel entdecken"
+        layout="is-light is-danger"
+        @click="redirectToGames"
       />
     </section>
 
@@ -36,8 +42,8 @@ function redirectToGames() {
           <p class="title">Ich bin Alex,</p>
           <p class="content">37 Jahre alt und arbeite als Webentwickler.</p>
           <p class="content">
-            Um meinen Kopf freizubekommen, habe ich schon immer gerne Brettspiele gespielt – mal mehr,
-            mal weniger.
+            Um meinen Kopf freizubekommen, habe ich schon immer gerne Brettspiele gespielt – mal
+            mehr, mal weniger.
           </p>
 
           <p class="content">
@@ -46,7 +52,8 @@ function redirectToGames() {
           </p>
 
           <p class="content">
-            Fun Fact: Viele meiner Hobbys fangen mit „B“ an: Brettspiele, Bücher lesen und Bloggen. 😊
+            Fun Fact: Viele meiner Hobbys fangen mit „B“ an: Brettspiele, Bücher lesen und Bloggen.
+            😊
           </p>
 
           <p class="content">

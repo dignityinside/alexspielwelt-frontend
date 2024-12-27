@@ -1,9 +1,12 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Profil',
   name: 'profile',
-  path: '/profile'
-})
+  path: '/profile',
+});
+
+useSeoMeta({
+  title: 'Profil',
+});
 </script>
 
 <template>

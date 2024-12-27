@@ -1,7 +1,10 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Impressum',
   path: '/impressum',
+});
+
+useSeoMeta({
+  title: 'Impressum',
 });
 
 const runtimeConfig = useRuntimeConfig();

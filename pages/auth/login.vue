@@ -1,9 +1,12 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Login',
   name: 'login',
-  path: '/login'
-})
+  path: '/login',
+});
+
+useSeoMeta({
+  title: 'Anmelden',
+});
 </script>
 
 <template>

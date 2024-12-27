@@ -1,16 +1,16 @@
 <script setup lang="ts">
 interface Item {
-  heading: string
-  title: string
-  icon?: string
+  heading: string;
+  title: string;
+  icon?: string;
 }
 
 const props = defineProps<{
-  items: Item[]
-}>()
+  items: Item[];
+}>();
 
 function filteredItems() {
-  return props.items.filter((item) => item.heading && item.title)
+  return props.items.filter((item) => item.heading && item.title);
 }
 </script>
 

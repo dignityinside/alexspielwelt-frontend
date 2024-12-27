@@ -1,7 +1,11 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Über mich',
   path: '/ich',
+});
+
+useSeoMeta({
+  title: 'Über mich',
+  description: 'Hallo, ich bin Alex, ein begeisterter Brettspielspieler.',
 });
 </script>
 

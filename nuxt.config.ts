@@ -2,18 +2,31 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  css: ['@/assets/global.css'],
-  plugins: [
-    { src: '~/plugins/storage.ts', mode: 'client' }, // Ensure mode is 'client'
-  ],
-  build: {
-    transpile: ['@fortawesome/vue-fontawesome']
+
+  devServer: {
+    port: 3001,
   },
+
+  css: ['@/assets/global.css'],
+
+  modules: ['@pinia/nuxt'],
+
+  plugins: [
+    {
+      src: '@/plugins/storage.ts',
+      mode: 'client',
+    },
+  ],
+
+  build: {
+    transpile: ['@fortawesome/vue-fontawesome'],
+  },
+
   runtimeConfig: {
     // The private keys which are only available server-side
-    apiBase: 'https://localhost:3001',
     // Keys within public are also exposed client-side
     public: {
+      baseURL: 'http://localhost:3000',
       name: 'Alex Spielwelt',
       slogan: 'Spiel-Empfehlungen & Einblicke',
       instagram: '@alexspielwelt',
@@ -21,4 +34,6 @@ export default defineNuxtConfig({
       email: 'mustermann@example.com',
     },
   },
+
+  modules: ['@pinia/nuxt'],
 });

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Datenschutzerklärung',
   path: '/datenschutz',
+});
+
+useSeoMeta({
+  title: 'Datenschutzerklärung',
 });
 
 const runtimeConfig = useRuntimeConfig();
