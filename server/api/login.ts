@@ -9,8 +9,5 @@ export default defineEventHandler(async (event) => {
     baseURL: runtimeConfig.public.baseURL,
     method: 'POST',
     body,
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 });

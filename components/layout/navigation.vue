@@ -60,7 +60,7 @@ const isOpen = ref(false);
           </template>
         </div>
 
-        <div class="navbar-end">
+        <div v-if="usersStore.isLoggedIn" class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
               <nuxt-link :to="{ name: 'profile' }" class="navbar-item">

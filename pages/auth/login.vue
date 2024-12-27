@@ -46,13 +46,12 @@ const response = ref([]);
 // Login user
 const onSubmit = handleSubmit(async (values) => {
   // Make request to server api
-  const { data, status } = await useFetch('/api/login', {
-    method: 'POST',
-    body: values,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const { data, status } = await useAsyncData('login', () =>
+    $fetch('/api/login', {
+      method: 'POST',
+      body: values,
+    }),
+  );
 
   // Update the values
   loadingStatus.value = status.value;
