@@ -1,10 +1,6 @@
 <script setup lang="ts">
+const { loggedIn } = useUserSession();
 import type { Game } from '~/types';
-
-definePageMeta({
-  name: 'games',
-  path: '/spieltipps',
-});
 
 useSeoMeta({
   title: 'Spieltipps',
@@ -35,8 +31,15 @@ const openGame = (slug: string) => {
 
     <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
 
-    <div v-if="status === 'success' && games">
-      <template v-if="gamesStore.gamesCount">
+    <div>
+      <p class="has-text-centered" v-if="loggedIn">
+        <nuxt-link :to="{ name: 'game.add' }">
+          <font-awesome-icon icon="fa fa-plus-circle" />
+          Hinzufügen
+        </nuxt-link>
+      </p>
+
+      <template v-if="games && games.length > 0">
         <section class="section is-medium has-text-centered">
           <h1 class="title">#Spieltipps</h1>
           <h2 class="subtitle">Ich helfe dir, das perfekte Brettspiel zu finden!</h2>

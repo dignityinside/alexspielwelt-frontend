@@ -29,6 +29,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.18.1",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "vue-tsc": "^2.1.10"

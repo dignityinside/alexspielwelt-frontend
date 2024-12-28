@@ -1,10 +1,6 @@
 <script setup lang="ts">
+const { loggedIn } = useUserSession();
 import type { Game } from '~/types';
-
-definePageMeta({
-  name: 'game',
-  path: '/spieltipps/:slug',
-});
 
 // Init config, store and route
 const gamesStore = useGamesStore();
@@ -50,6 +46,13 @@ function onLinkClick(link: string) {
 
     <div v-if="status === 'success' && game">
       <div>
+        <p class="has-text-centered" v-if="loggedIn">
+          <nuxt-link :to="{ name: 'game.edit', params: { slug } }">
+            <font-awesome-icon icon="fa fa-pen-to-square" />
+            Bearbeiten
+          </nuxt-link>
+        </p>
+
         <section class="section is-small has-text-centered">
           <h1 v-if="game?.title" class="title">#{{ game.title }}</h1>
 

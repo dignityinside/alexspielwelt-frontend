@@ -4,11 +4,6 @@ import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
 const { loggedIn, fetch: refreshSession } = useUserSession();
 
-definePageMeta({
-  name: 'login',
-  path: '/login',
-});
-
 useSeoMeta({
   title: 'Anmelden',
 });

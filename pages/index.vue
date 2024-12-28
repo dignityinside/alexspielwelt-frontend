@@ -1,9 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  name: 'home',
-  path: '/',
-});
-
 useSeoMeta({
   title: 'Alex Spielwelt',
   description: 'Spiel-Empfehlungen & Einblicke.',
@@ -12,7 +7,7 @@ useSeoMeta({
 const router = useRouter();
 
 function redirectToGames() {
-  router.push({ name: 'games' });
+  navigateTo({ name: 'games' });
 }
 </script>
 

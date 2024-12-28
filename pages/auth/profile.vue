@@ -2,12 +2,6 @@
 // Init user session
 const { loggedIn, user: userData, session } = useUserSession();
 
-definePageMeta({
-  name: 'profile',
-  path: '/profile',
-  middleware: ['authenticated'],
-});
-
 useSeoMeta({
   title: 'Profil',
 });

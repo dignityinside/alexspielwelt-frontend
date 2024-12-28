@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  path: '/datenschutz',
-});
-
 useSeoMeta({
   title: 'Datenschutzerklärung',
 });

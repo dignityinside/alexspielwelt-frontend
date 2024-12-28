@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  path: '/impressum',
-});
-
 useSeoMeta({
   title: 'Impressum',
 });
