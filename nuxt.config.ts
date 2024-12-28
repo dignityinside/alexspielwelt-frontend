@@ -1,15 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2024-12-28',
+  future: {
+    compatibilityVersion: 4,
+  },
+
   devtools: { enabled: true },
+
   devServer: {
     port: 3001,
   },
+
   typescript: {
     typeCheck: true,
     strict: false,
   },
+
   css: ['@/assets/global.css'],
+
   modules: [
     [
       '@pinia/nuxt',
@@ -20,15 +28,16 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-auth-utils',
   ],
+
   imports: {
     dirs: ['stores'],
   },
+
   build: {
     transpile: ['@fortawesome/vue-fontawesome'],
   },
+
   runtimeConfig: {
-    // The private keys which are only available server-side
-    // Keys within public are also exposed client-side
     public: {
       baseURL: 'http://localhost:3000',
       name: 'Alex Spielwelt',
