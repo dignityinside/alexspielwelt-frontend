@@ -6,22 +6,22 @@ export default {
       {
         name: 'home',
         path: '/',
-        component: () => import('~/pages/index.vue'),
+        component: () => import('~/pages/home.vue'),
       },
       {
         name: 'about',
         path: '/ich',
-        component: () => import('~/pages/static/about.vue'),
+        component: () => import('~/pages/about.vue'),
       },
       {
         name: 'imprint',
         path: '/impressum',
-        component: () => import('~/pages/static/imprint.vue'),
+        component: () => import('~/pages/imprint.vue'),
       },
       {
         name: 'privacy',
         path: '/datenschutz',
-        component: () => import('~/pages/static/privacy.vue'),
+        component: () => import('~/pages/privacy.vue'),
       },
       {
         name: 'login',
