@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { useFetch } from '#app';
-import type { Game } from '~/types';
-
-// Init config, store
-const runtimeConfig = useRuntimeConfig();
-const usersStore = useUsersStore();
+// Init user session
+const { loggedIn, user: userData, session } = useUserSession();
 
 definePageMeta({
   name: 'profile',
@@ -16,17 +12,26 @@ useSeoMeta({
   title: 'Profil',
 });
 
+interface User {
+  id: number;
+  name: string;
+  token: string;
+}
+
+const user = computed(() => {
+  return userData.value as User;
+});
+
 // Logout user
 const { logoutUser } = useLogoutUser();
 const onLogoutUser = () => logoutUser();
-
-const user = computed(() => usersStore.getUser);
 </script>
 
 <template>
   <div>
-    <section class="section is-medium has-text-centered">
+    <section v-if="loggedIn" class="section is-medium has-text-centered">
       <h1 class="title">Hallo, {{ user.name }}!</h1>
+      <p class="content">{{ $formatDate(session.loggedInAt.toString()) }}</p>
       <ui-button type="button" text="Logout" @click="onLogoutUser" />
     </section>
   </div>

@@ -1,17 +1,3 @@
-<script setup lang="ts">
-const usersStore = useUsersStore();
-const { $storage } = useNuxtApp();
-
-// When token exists in LocalStorage, login user
-if ($storage && $storage.getItem('token')) {
-  usersStore.setToken($storage.getItem('token'));
-}
-
-if ($storage && $storage.getItem('user')) {
-  usersStore.setUser($storage.getItem('user', true));
-}
-</script>
-
 <template>
   <div>
     <layout-header />

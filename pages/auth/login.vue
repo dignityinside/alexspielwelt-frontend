@@ -1,4 +1,9 @@
 <script setup lang="ts">
+// Import package which are not autoloaded
+import * as yup from 'yup';
+import { useField, useForm } from 'vee-validate';
+const { loggedIn, fetch: refreshSession } = useUserSession();
+
 definePageMeta({
   name: 'login',
   path: '/login',
@@ -8,16 +13,8 @@ useSeoMeta({
   title: 'Anmelden',
 });
 
-// Import package which are not autoloaded
-import * as yup from 'yup';
-import { useField, useForm } from 'vee-validate';
-
-// Init router, storage and store
-const { $storage } = useNuxtApp();
-const usersStore = useUsersStore();
-
 // Redirect when user already logged in
-if ($storage && $storage.getItem('token')) {
+if (loggedIn.value) {
   navigateTo({ name: 'profile' });
 }
 
@@ -38,41 +35,24 @@ const { handleSubmit, errors } = useForm({ validationSchema });
 const { value: username } = useField<string>('username');
 const { value: password } = useField<string>('password');
 
-// Init values
-const loadingStatus = ref('');
-const response = ref([]);
+const apiError = ref(false);
 
 // Login user
 const onSubmit = handleSubmit(async (values) => {
-  // Make request to server api
-  const { data, status } = await useAsyncData('login', () =>
-    $fetch('/api/login', {
-      method: 'POST',
-      body: values,
-    }),
-  );
+  $fetch('/api/login', {
+    method: 'POST',
+    body: values,
+  })
+    .then(async () => {
+      // Refresh the session on client-side
+      await refreshSession();
 
-  // Update the values
-  loadingStatus.value = status.value;
-  response.value = data.value;
-
-  // Login was successfully
-  if (status.value === 'success' && data.value) {
-    const { token, ...userData } = data.value;
-
-    // Save user and token to store
-    usersStore.setUser(userData);
-    usersStore.setToken(token);
-
-    // Save user and token to LocalStorage
-    if ($storage) {
-      $storage.setItem('user', userData, true);
-      $storage.setItem('token', token);
-    }
-
-    // Redirect user to profile page
-    navigateTo({ name: 'profile' });
-  }
+      // Redirect to profile page
+      await navigateTo({ name: 'profile' });
+    })
+    .catch((e) => {
+      apiError.value = true;
+    });
 });
 </script>
 
@@ -80,16 +60,11 @@ const onSubmit = handleSubmit(async (values) => {
   <div>
     <h1 class="title has-text-centered">Anmelden</h1>
 
-    <div v-if="loadingStatus === 'panding'">Lädt...</div>
-
-    <layout-notification
-      v-if="loadingStatus === 'error'"
-      message="Login oder Passwort sind falsch."
-    />
+    <layout-notification v-if="apiError" message="Login oder Passwort sind falsch." />
 
     <div class="columns is-centered">
       <div class="column is-4">
-        <form @submit="onSubmit">
+        <form @submit.prevent="onSubmit">
           <ui-input
             type="text"
             name="username"

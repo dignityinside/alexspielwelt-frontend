@@ -10,21 +10,19 @@ export default defineNuxtConfig({
     strict: false,
   },
   css: ['@/assets/global.css'],
-  modules: [[
-    '@pinia/nuxt',
-    {
-      autoImports: ['defineStore', 'acceptHMRUpdate'],
-    },
-  ], '@nuxt/eslint'],
+  modules: [
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
+      },
+    ],
+    '@nuxt/eslint',
+    'nuxt-auth-utils',
+  ],
   imports: {
     dirs: ['stores'],
   },
-  plugins: [
-    {
-      src: '@/plugins/storage.ts',
-      mode: 'client',
-    },
-  ],
   build: {
     transpile: ['@fortawesome/vue-fontawesome'],
   },
@@ -38,6 +36,14 @@ export default defineNuxtConfig({
       instagram: '@alexspielwelt',
       address: 'Max Mustermann, Musterstr. 123, 12345 Musterstadt',
       email: 'mustermann@example.com',
+    },
+    session: {
+      name: 'nuxt-session',
+      password: process.env.NUXT_SESSION_PASSWORD || '',
+      cookie: {
+        sameSite: 'lax',
+      },
+      maxAge: 60 * 60 * 24 * 30, // 1 Month
     },
   },
 });

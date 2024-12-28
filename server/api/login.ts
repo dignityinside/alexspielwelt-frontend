@@ -1,3 +1,5 @@
+import type { User } from '~/types';
+
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
 
@@ -5,9 +7,25 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   // Make a request to backend api
-  return await $fetch('/auth', {
+  const data = await $fetch<User>('/auth', {
     baseURL: runtimeConfig.public.baseURL,
     method: 'POST',
     body,
   });
+
+  // Save data to encrypted session storage
+  if (data) {
+    await setUserSession(event, {
+      user: {
+        id: data.id,
+        name: data.name,
+      },
+      secure: {
+        token: data.token,
+      },
+      loggedInAt: new Date(),
+    });
+  }
+
+  return {};
 });

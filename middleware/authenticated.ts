@@ -1,7 +1,8 @@
 export default defineNuxtRouteMiddleware(() => {
-  const usersStore = useUsersStore();
+  const { loggedIn } = useUserSession();
 
-  if (!usersStore.isLoggedIn) {
+  // redirect the user to the login screen if they're not authenticated
+  if (!loggedIn.value) {
     return navigateTo('/login');
   }
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const usersStore = useUsersStore();
+const { loggedIn } = useUserSession();
 
 interface Item {
   name: string;
@@ -46,7 +46,7 @@ const isOpen = ref(false);
           </template>
         </div>
 
-        <div v-if="usersStore.isLoggedIn" class="navbar-end">
+        <div v-if="loggedIn" class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
               <nuxt-link :to="{ name: 'profile' }" class="navbar-item">

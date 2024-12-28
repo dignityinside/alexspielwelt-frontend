@@ -23,3 +23,9 @@ export interface Game {
   metaDescription?: string;
   createdAt: string;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  token: string;
+}
