@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useFetch } from '#app';
 import type { Game } from '~/types';
 
 definePageMeta({
@@ -13,32 +12,20 @@ useSeoMeta({
 });
 
 // Init config, store and router
-
-const runtimeConfig = useRuntimeConfig();
 const gamesStore = useGamesStore();
-const router = useRouter();
 
 // Get data from api
-
-const {
-  data: items,
-  status,
-  error,
-} = useFetch<Game[]>('/games', {
-  baseURL: runtimeConfig.public.baseURL,
-  immediate: true,
-});
+const { data: items, status, error } = await useAPI('/games');
 
 // Save data in store
-
-const games = computed(() => items.value);
+const games = computed(() => items.value as Game[]);
 
 if (games.value) {
   gamesStore.setGames(games.value);
 }
 
 const openGame = (slug: string) => {
-  router.push({ name: 'game', params: { slug } });
+  navigateTo({ name: 'game', params: { slug } });
 };
 </script>
 

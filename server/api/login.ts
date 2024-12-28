@@ -20,9 +20,7 @@ export default defineEventHandler(async (event) => {
         id: data.id,
         name: data.name,
       },
-      secure: {
-        token: data.token,
-      },
+      token: data.token,
       loggedInAt: new Date(),
     });
   }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useFetch } from '#app';
 import type { Game } from '~/types';
 
 definePageMeta({
@@ -8,34 +7,22 @@ definePageMeta({
 });
 
 // Init config, store and route
-
-const runtimeConfig = useRuntimeConfig();
 const gamesStore = useGamesStore();
 const route = useRoute();
 
 const slug = route.params.slug;
 
 // Get data from api
-
-const {
-  data: item,
-  status,
-  error,
-} = useFetch<Game>(`/games/${slug}`, {
-  baseURL: runtimeConfig.public.baseURL,
-  immediate: true,
-});
+const { data: item, status, error } = await useAPI(`/games/${slug}`);
 
 // Save data in store
-
-const game = computed(() => item.value);
+const game = computed(() => item.value as Game);
 
 if (game.value) {
   gamesStore.setGame(game.value);
 }
 
 // Watch for changes in the game and update meta tags dynamically
-
 watch(
   game,
   (newGame) => {
@@ -50,7 +37,6 @@ watch(
 );
 
 // Function to handle external link clicks
-
 function onLinkClick(link: string) {
   window.open(link, '_blank');
 }
