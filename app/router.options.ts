@@ -38,22 +38,37 @@ export default {
         path: '/spieltipps/:slug',
         component: () => import('~/pages/games/game.vue'),
       },
-      {
-        name: 'game.edit',
-        path: '/spieltipps/edit/:slug',
-        middleware: ['authenticated'],
-        component: () => import('~/pages/games/edit.vue'),
-      },
+      // Routes need auth
       {
         name: 'game.add',
         path: '/spieltipps/add',
-        middleware: ['authenticated'],
+        meta: {
+          middleware: ['authenticated'],
+        },
         component: () => import('~/pages/games/edit.vue'),
+      },
+      {
+        name: 'game.edit',
+        path: '/spieltipps/edit/:slug',
+        meta: {
+          middleware: ['authenticated'],
+        },
+        component: () => import('~/pages/games/edit.vue'),
+      },
+      {
+        name: 'games.admin',
+        path: '/spieltipps/admin',
+        meta: {
+          middleware: ['authenticated'],
+        },
+        component: () => import('~/pages/games/admin.vue'),
       },
       {
         name: 'profile',
         path: '/profil',
-        middleware: ['authenticated'],
+        meta: {
+          middleware: ['authenticated'],
+        },
         component: () => import('~/pages/auth/profile.vue'),
       },
     ];

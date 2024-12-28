@@ -47,6 +47,14 @@ const isOpen = ref(false);
         </div>
 
         <div v-if="loggedIn" class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Admin</a>
+            <div class="navbar-dropdown">
+              <nuxt-link :to="{ name: 'games.admin' }" class="navbar-item">
+                <span>Spieltipps</span>
+              </nuxt-link>
+            </div>
+          </div>
           <div class="navbar-item">
             <div class="buttons">
               <nuxt-link :to="{ name: 'profile' }" class="navbar-item">

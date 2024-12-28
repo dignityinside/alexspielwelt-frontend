@@ -58,9 +58,7 @@ const validationSchema = yup.object({
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema });
 
 // Get data from api
-const { data } = await useAPI(`/games/edit/${slugId}`);
-
-// Save data in store
+const { data } = await useAPI(`/games/admin/edit/${slugId}`);
 const game = computed(() => data.value as Game);
 
 // Prefill the form
@@ -83,10 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
       body: values,
     })
       .then(async () => {
-        navigateTo({
-          name: 'game',
-          params: { slugId },
-        });
+        navigateTo({ name: 'games.admin' });
       })
       .catch((e) => {});
   } else {
@@ -96,9 +91,7 @@ const onSubmit = handleSubmit(async (values) => {
       body: values,
     })
       .then(async () => {
-        navigateTo({
-          name: 'games',
-        });
+        navigateTo({ name: 'games.admin' });
       })
       .catch((e) => {});
   }
