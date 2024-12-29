@@ -7,10 +7,6 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  devServer: {
-    port: 3001,
-  },
-
   typescript: {
     typeCheck: true,
     strict: false,
@@ -39,7 +35,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseURL: 'http://localhost:3000',
+      baseURL: 'http://localhost:3001',
       name: 'Alex Spielwelt',
       slogan: 'Spiel-Empfehlungen & Einblicke',
       instagram: '@alexspielwelt',
