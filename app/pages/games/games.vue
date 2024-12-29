@@ -7,15 +7,14 @@ useSeoMeta({
   description: 'Ich helfe dir, das perfekte Brettspiel zu finden!',
 });
 
-// Init config, store and router
+// Init store
 const gamesStore = useGamesStore();
 
 // Get data from api
 const { data: items, status, error } = await useAPI('/games');
-
-// Save data in store
 const games = computed(() => items.value as Game[]);
 
+// Save data to store
 if (games.value) {
   gamesStore.setGames(games.value);
 }

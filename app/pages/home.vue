@@ -4,8 +4,6 @@ useSeoMeta({
   description: 'Spiel-Empfehlungen & Einblicke.',
 });
 
-const router = useRouter();
-
 function redirectToGames() {
   navigateTo({ name: 'games' });
 }
