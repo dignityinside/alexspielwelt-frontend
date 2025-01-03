@@ -27,5 +27,5 @@ export interface Game {
 export interface User {
   id: number;
   name: string;
-  token: string;
+  access_token: string;
 }

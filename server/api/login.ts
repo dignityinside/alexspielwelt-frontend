@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   // Make a request to backend api
-  const data = await $fetch<User>('/auth', {
+  const data = await $fetch<User>('/auth/login', {
     baseURL: runtimeConfig.public.baseURL,
     method: 'POST',
     body,
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
         id: data.id,
         name: data.name,
       },
-      token: data.token,
+      token: data.access_token,
       loggedInAt: new Date(),
     });
   }
