@@ -2,6 +2,7 @@
 import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
 import type { Game } from '~/types';
+import { GameStatus, GameStatusLabels } from '~/enums/game-status';
 
 // Init route, store
 const route = useRoute();
@@ -14,13 +15,14 @@ const isEdit = ref(route.params.slug !== undefined);
 const initialValues = {
   title: '',
   description: '',
+  intro: '',
   slug: '',
   slogan: '',
-  statusId: 0,
+  status: GameStatus.Draft,
   img: '',
   link: '',
   publisher: '',
-  releaseYear: '',
+  releaseYear: 0,
   players: '',
   playTime: '',
   genre: '',
@@ -36,13 +38,14 @@ const initialValues = {
 const validationSchema = yup.object({
   title: yup.string().required('Der Titel ist erforderlich'),
   slug: yup.string().nullable(),
+  intro: yup.string().nullable(),
   description: yup.string().nullable(),
   slogan: yup.string().nullable(),
-  statusId: yup.string().nullable(),
+  status: yup.string().nullable(),
   img: yup.string().nullable().required('Das Bild ist erforderlich'),
   link: yup.string().nullable(),
   publisher: yup.string().nullable(),
-  releaseYear: yup.string().nullable(),
+  releaseYear: yup.number().nullable(),
   players: yup.string().nullable(),
   playTime: yup.string().nullable(),
   genre: yup.string().nullable(),
@@ -58,7 +61,7 @@ const validationSchema = yup.object({
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema });
 
 // Get data from api
-const { data } = await useAPI(`/games/admin/edit/${slugId}`);
+const { data } = await useAPI(`/games/edit/${slugId}`);
 const game = computed(() => data.value as Game);
 
 // Prefill the form
@@ -99,9 +102,10 @@ const onSubmit = handleSubmit(async (values) => {
 
 const { value: title } = useField<string>('title');
 const { value: slug } = useField<string>('slug');
+const { value: intro } = useField<string>('intro');
 const { value: description } = useField<string>('description');
 const { value: slogan } = useField<string>('slogan');
-const { value: statusId } = useField<number>('statusId');
+const { value: status } = useField<string>('status');
 const { value: img } = useField<string>('img');
 const { value: link } = useField<string>('link');
 const { value: publisher } = useField<string>('publisher');
@@ -117,10 +121,12 @@ const { value: gameDesigner } = useField<string>('gameDesigner');
 const { value: metaTitle } = useField<string>('metaTitle');
 const { value: metaDescription } = useField<string>('metaDescription');
 
-const statusOptions = ref([
-  { id: 0, name: 'Entwurf' },
-  { id: 1, name: 'Veröffentlicht' },
-]);
+const statusOptions = computed(() => {
+  return Object.entries(GameStatus).map(([key, value]) => ({
+    id: value,
+    name: GameStatusLabels[value],
+  }));
+});
 </script>
 
 <template>
@@ -215,6 +221,16 @@ const statusOptions = ref([
 
         <div class="column is-12">
           <ui-textarea
+            name="intro"
+            label="Intro Text"
+            v-model="intro"
+            :rows="5"
+            :error-message="errors.intro"
+          />
+        </div>
+
+        <div class="column is-12">
+          <ui-textarea
             name="description"
             label="Beschreibung"
             v-model="description"
@@ -265,11 +281,11 @@ const statusOptions = ref([
 
         <div class="column is-12">
           <ui-select
-            name="statusId"
+            name="status"
             label="Status"
-            v-model="statusId"
+            v-model="status"
             :options="statusOptions"
-            :error-message="errors.statusId"
+            :error-message="errors.status"
           />
         </div>
 

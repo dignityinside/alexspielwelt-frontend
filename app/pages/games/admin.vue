@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import type { Game } from '~/types';
+import { GameStatus, GameStatusLabels } from '~/enums/game-status';
 
-const { data } = await useAPI('/games/admin/list');
+const { data } = await useAPI('/games/admin');
 const games = computed(() => data.value as Game[]);
-
-function isVisible(statusId: number) {
-  const statusDraft = 0;
-  return statusId !== statusDraft;
-}
 </script>
 
 <template>
@@ -24,9 +20,9 @@ function isVisible(statusId: number) {
         <thead>
           <tr>
             <th><abbr title="Id">#</abbr></th>
-            <th><abbr title="Title">Title</abbr></th>
+            <th><abbr title="Title">Titel</abbr></th>
             <th><abbr title="Status">Status</abbr></th>
-            <th><abbr title="Date">Date</abbr></th>
+            <th><abbr title="Date">Datum</abbr></th>
             <th></th>
           </tr>
         </thead>
@@ -35,14 +31,14 @@ function isVisible(statusId: number) {
             <th>{{ game.id }}</th>
             <td>
               <nuxt-link
-                v-if="isVisible(game.statusId)"
+                v-if="game.status === GameStatus.Public"
                 :to="{ name: 'game', params: { slug: game.slug } }"
               >
                 {{ game.title }}
               </nuxt-link>
               <span v-else>{{ game.title }}</span>
             </td>
-            <td>{{ isVisible(game.statusId) ? 'Veröffentlich' : 'Entwurf' }}</td>
+            <td>{{ GameStatusLabels[game.status] }}</td>
             <td>{{ $formatDate(game.createdAt, true) }}</td>
             <td>
               <nuxt-link :to="{ name: 'game.edit', params: { slug: game.slug } }">

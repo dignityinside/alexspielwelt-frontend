@@ -77,6 +77,8 @@ function onLinkClick(link: string) {
           <p v-if="game?.releaseYear">Erstmals veröffentlicht im Jahr {{ game.releaseYear }}</p>
         </div>
 
+        <div class="content has-text-centered" v-dompurify-html="game.intro"></div>
+
         <hr />
 
         <nav class="level">
@@ -123,7 +125,7 @@ function onLinkClick(link: string) {
         <div class="content">
           <div class="mx-4" v-if="game?.description" v-dompurify-html="game.description"></div>
 
-          <div v-if="game?.link" class="has-text-centered">
+          <div v-if="game?.link" class="has-text-centered my-4">
             <ui-button
               text="Hier kommst du zum Brettspiel*"
               iconLeft="fa-brands fa-amazon"

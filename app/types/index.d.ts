@@ -2,9 +2,10 @@ export interface Game {
   id: number;
   title: string;
   slug?: string;
+  intro?: string;
   description?: string;
   slogan?: string;
-  statusId?: number;
+  status?: string;
   img: string;
   link?: string;
   publisher?: string;
@@ -22,6 +23,8 @@ export interface Game {
   metaTitle?: string;
   metaDescription?: string;
   createdAt: string;
+  ean?: string;
+  uvp?: number;
 }
 
 export interface User {

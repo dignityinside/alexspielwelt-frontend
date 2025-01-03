@@ -28,7 +28,7 @@ const openGame = (slug: string) => {
   <div>
     <div v-if="status === 'pending'">Lädt...</div>
 
-    <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
+    <div v-if="status === 'error' && games">Fehler beim Laden: {{ error.message }}</div>
 
     <div>
       <p class="has-text-centered" v-if="loggedIn">
@@ -49,13 +49,14 @@ const openGame = (slug: string) => {
             v-for="game in games"
             :key="game.slug"
             @click="openGame(game.slug)"
-            class="game column is-one-fifth"
+            class="game column is-one-fifth mx-2 my-2"
           >
             <img :src="game.img" :alt="game.title" :title="game.title" class="image" />
             <p class="content mt-2">{{ game.title }}</p>
           </div>
         </div>
       </template>
+      <template v-else>Keine Spieltipps gefunden.</template>
     </div>
 
     <p v-if="status === 'success' && (!games || gamesStore.gamesCount === 0)">
