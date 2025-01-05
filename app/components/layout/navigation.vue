@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { loggedIn } = useUserSession();
+const { isAdmin } = useUserRoles();
 
 interface Item {
   name: string;
@@ -47,7 +48,7 @@ const isOpen = ref(false);
         </div>
 
         <div v-if="loggedIn" class="navbar-end">
-          <div class="navbar-item has-dropdown is-hoverable">
+          <div v-if="isAdmin()" class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">Admin</a>
             <div class="navbar-dropdown">
               <nuxt-link :to="{ name: 'games.admin' }" class="navbar-item">

@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
         name: data.name,
       },
       token: data.access_token,
+      roles: data.roles,
       loggedInAt: new Date(),
     });
   }

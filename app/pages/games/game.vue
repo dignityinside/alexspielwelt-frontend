@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { loggedIn } = useUserSession();
+const { isAdmin } = useUserRoles();
+
 import type { Game } from '~/types';
 
 // Init config, store and route
@@ -46,7 +48,7 @@ function onLinkClick(link: string) {
 
     <div v-if="status === 'success' && game">
       <div>
-        <p class="has-text-centered" v-if="loggedIn">
+        <p class="has-text-centered" v-if="loggedIn && isAdmin()">
           <nuxt-link :to="{ name: 'game.edit', params: { slug } }">
             <font-awesome-icon icon="fa fa-pen-to-square" />
             Bearbeiten

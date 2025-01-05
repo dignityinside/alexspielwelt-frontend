@@ -44,6 +44,7 @@ export default {
         path: '/spieltipps/add',
         meta: {
           middleware: ['authenticated'],
+          roles: ['admin'],
         },
         component: () => import('~/pages/games/edit.vue'),
       },
@@ -52,6 +53,7 @@ export default {
         path: '/spieltipps/edit/:slug',
         meta: {
           middleware: ['authenticated'],
+          roles: ['admin'],
         },
         component: () => import('~/pages/games/edit.vue'),
       },
@@ -60,6 +62,7 @@ export default {
         path: '/spieltipps/admin',
         meta: {
           middleware: ['authenticated'],
+          roles: ['admin'],
         },
         component: () => import('~/pages/games/admin.vue'),
       },
@@ -68,6 +71,7 @@ export default {
         path: '/profil',
         meta: {
           middleware: ['authenticated'],
+          roles: ['admin', 'user'],
         },
         component: () => import('~/pages/auth/profile.vue'),
       },

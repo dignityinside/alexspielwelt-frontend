@@ -31,13 +31,6 @@ const openGame = (slug: string) => {
     <div v-if="status === 'error' && games">Fehler beim Laden: {{ error.message }}</div>
 
     <div>
-      <p class="has-text-centered" v-if="loggedIn">
-        <nuxt-link :to="{ name: 'game.add' }">
-          <font-awesome-icon icon="fa fa-plus-circle" />
-          Hinzufügen
-        </nuxt-link>
-      </p>
-
       <template v-if="games && games.length > 0">
         <section class="section is-medium has-text-centered">
           <h1 class="title">#Spieltipps</h1>

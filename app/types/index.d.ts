@@ -31,4 +31,5 @@ export interface User {
   id: number;
   name: string;
   access_token: string;
+  roles: string;
 }
