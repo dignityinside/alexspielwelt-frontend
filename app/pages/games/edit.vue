@@ -18,7 +18,7 @@ const initialValues = {
   intro: '',
   slug: '',
   slogan: '',
-  status: GameStatus.Draft,
+  status: GameStatus.DRAFT,
   img: '',
   link: '',
   publisher: '',

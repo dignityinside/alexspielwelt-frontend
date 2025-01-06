@@ -1,11 +1,11 @@
 export enum GameStatus {
-  Draft = 'draft',
-  Public = 'public',
-  Hidden = 'hidden',
+  DRAFT = 'draft',
+  PUBLIC = 'public',
+  HIDDEN = 'hidden',
 }
 
 export const GameStatusLabels = {
-  [GameStatus.Draft]: 'Entwurf',
-  [GameStatus.Public]: 'Veröffentlicht',
-  [GameStatus.Hidden]: 'Versteckt',
+  [GameStatus.DRAFT]: 'Entwurf',
+  [GameStatus.PUBLIC]: 'Veröffentlicht',
+  [GameStatus.HIDDEN]: 'Versteckt',
 };

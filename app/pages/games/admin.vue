@@ -31,7 +31,7 @@ const games = computed(() => data.value as Game[]);
             <th>{{ game.id }}</th>
             <td>
               <nuxt-link
-                v-if="game.status === GameStatus.Public"
+                v-if="game.status === GameStatus.PUBLIC"
                 :to="{ name: 'game', params: { slug: game.slug } }"
               >
                 {{ game.title }}
