@@ -35,13 +35,17 @@ defineProps({
     type: String,
     default: '',
   },
+  clearIcon: {
+    type: Boolean,
+    default: false,
+  },
   errorMessage: {
     type: String,
     default: '',
   },
 });
 
-defineEmits(['update:modelValue']);
+defineEmits(['update:modelValue', 'clear']);
 </script>
 
 <template>
@@ -69,6 +73,13 @@ defineEmits(['update:modelValue']);
       </span>
       <span v-if="iconRight" class="icon is-small is-right">
         <font-awesome-icon :icon="iconRight" />
+      </span>
+      <span
+        v-if="!iconRight && clearIcon"
+        class="icon is-small is-right is-clickable"
+        @click="$emit('clear')"
+      >
+        <font-awesome-icon icon="fa-times" />
       </span>
     </div>
   </div>
