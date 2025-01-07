@@ -25,6 +25,7 @@ export interface Game {
   createdAt: string;
   ean?: string;
   uvp?: number;
+  genres?: GameGenre;
 }
 
 export interface User {
@@ -32,4 +33,10 @@ export interface User {
   name: string;
   access_token: string;
   roles: string;
+}
+
+export interface GameGenre {
+  id: string;
+  name: string;
+  slug?: string;
 }

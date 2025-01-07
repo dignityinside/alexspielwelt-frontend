@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
-import type { Game } from '~/types';
+import type { Game, GameGenre } from '~/types';
 import { GameStatus, GameStatusLabels } from '~/enums/game-status';
 
 // Init route, store
@@ -33,6 +33,7 @@ const initialValues = {
   gameDesigner: '',
   metaTitle: '',
   metaDescription: '',
+  genres: [] as number[],
 };
 
 const validationSchema = yup.object({
@@ -48,7 +49,7 @@ const validationSchema = yup.object({
   releaseYear: yup.number().nullable(),
   players: yup.string().nullable(),
   playTime: yup.string().nullable(),
-  genre: yup.string().nullable(),
+  genres: yup.array().of(yup.number()).nullable(),
   rating: yup.string().nullable(),
   difficulty: yup.string().nullable(),
   recommendedAge: yup.string().nullable(),
@@ -70,6 +71,11 @@ onMounted(async () => {
     const filteredValues = Object.fromEntries(
       Object.entries(game.value).filter(([key]) => key in initialValues),
     );
+
+    // Map genres to ids
+    if (filteredValues.genres && Array.isArray(filteredValues.genres)) {
+      filteredValues.genres = filteredValues.genres.map((genre) => genre.id);
+    }
 
     resetForm({ values: filteredValues });
   }
@@ -112,7 +118,7 @@ const { value: publisher } = useField<string>('publisher');
 const { value: releaseYear } = useField<number>('releaseYear');
 const { value: players } = useField<string>('players');
 const { value: playTime } = useField<string>('playTime');
-const { value: genre } = useField<string>('genre');
+const { value: genres } = useField<number[]>('genres');
 const { value: rating } = useField<number>('rating');
 const { value: difficulty } = useField<number>('difficulty');
 const { value: recommendedAge } = useField<string>('recommendedAge');
@@ -127,6 +133,14 @@ const statusOptions = computed(() => {
     name: GameStatusLabels[value],
   }));
 });
+
+// Fetch game genres from API
+const { data: gameGenreItems } = await useAPI('/games/genres/all');
+const genresOptions = computed(() => (gameGenreItems.value as GameGenre[]) ?? ([] as GameGenre[]));
+
+if (!genres.value) {
+  genres.value = [];
+}
 </script>
 
 <template>
@@ -154,7 +168,21 @@ const statusOptions = computed(() => {
         </div>
 
         <div class="column is-2">
-          <ui-input name="genre" label="Genre" v-model="genre" :error-message="errors.genre" />
+          <div class="field">
+            <div class="label">Spielgenres</div>
+            <div class="control">
+              <div class="select is-multiple">
+                <select v-model="genres" multiple>
+                  <option v-for="option in genresOptions" :key="option.id" :value="option.id">
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <p v-if="errors.genres" class="help is-danger">
+              {{ errors.genres }}
+            </p>
+          </div>
         </div>
 
         <div class="column is-12">
