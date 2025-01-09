@@ -2,6 +2,7 @@
 // Import package which are not autoloaded
 import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
+import { ApiEndpoint } from '~/enums/api-endpoint';
 const { loggedIn, fetch: refreshSession } = useUserSession();
 
 useSeoMeta({
@@ -34,7 +35,7 @@ const apiError = ref(false);
 
 // Login user
 const onSubmit = handleSubmit(async (values) => {
-  $fetch('/api/login', {
+  $fetch(ApiEndpoint.LOGIN, {
     method: 'POST',
     body: values,
   })

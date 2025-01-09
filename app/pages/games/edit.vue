@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
 import type { Game, GameGenre } from '~/types';
 import { GameStatus, GameStatusLabels } from '~/enums/game-status';
+import { ApiEndpoint } from '~/enums/api-endpoint';
 
 // Init route, store
 const route = useRoute();
@@ -62,7 +63,7 @@ const validationSchema = yup.object({
 const { handleSubmit, errors, resetForm } = useForm({ validationSchema });
 
 // Get data from api
-const { data } = await useAPI(`/games/edit/${slugId}`);
+const { data } = await useAPI(ApiEndpoint.GAMES_ADMIN_EDIT_FORM + slugId);
 const game = computed(() => data.value as Game);
 
 // Prefill the form
@@ -85,7 +86,7 @@ onMounted(async () => {
 const onSubmit = handleSubmit(async (values) => {
   if (isEdit.value) {
     // edit game
-    await useAPI(`/games/${slugId}`, {
+    await useAPI(ApiEndpoint.GAMES_ADMIN_EDIT + slugId, {
       method: 'PATCH',
       body: values,
     })
@@ -95,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
       .catch((e) => {});
   } else {
     // new game
-    await useAPI('games', {
+    await useAPI(ApiEndpoint.GAMES_ADMIN_ADD, {
       method: 'POST',
       body: values,
     })
@@ -135,7 +136,7 @@ const statusOptions = computed(() => {
 });
 
 // Fetch game genres from API
-const { data: gameGenreItems } = await useAPI('/games/genres/all');
+const { data: gameGenreItems } = await useAPI(ApiEndpoint.GAMES_GENRES);
 const genresOptions = computed(() => (gameGenreItems.value as GameGenre[]) ?? ([] as GameGenre[]));
 
 if (!genres.value) {

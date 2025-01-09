@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Game } from '~/types';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ApiEndpoint } from '~/enums/api-endpoint';
 
 useSeoMeta({
   title: 'Spieltipps',
@@ -11,7 +12,7 @@ useSeoMeta({
 const gamesStore = useGamesStore();
 
 // Get data from api
-const { data: items, status, error } = await useAPI('/games');
+const { data: items, status, error } = await useAPI(ApiEndpoint.GAMES_LIST);
 const games = computed(() => items.value as Game[]);
 
 // Save data to store

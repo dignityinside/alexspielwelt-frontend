@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ApiEndpoint } from '~/enums/api-endpoint';
+
 const { loggedIn } = useUserSession();
 const { isAdmin } = useUserRoles();
 
@@ -11,7 +13,7 @@ const route = useRoute();
 const slug = route.params.slug;
 
 // Get data from api
-const { data: item, status, error } = await useAPI(`/games/${slug}`);
+const { data: item, status, error } = await useAPI(ApiEndpoint.GAMES_GAME + slug);
 
 // Save data in store
 const game = computed(() => item.value as Game);

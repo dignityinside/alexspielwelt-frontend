@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Game } from '~/types';
 import { GameStatus, GameStatusLabels } from '~/enums/game-status';
+import { ApiEndpoint } from '~/enums/api-endpoint';
 
-const { data } = await useAPI('/games/admin');
+const { data } = await useAPI(ApiEndpoint.GAMES_ADMIN);
 const games = computed(() => data.value as Game[]);
 </script>
 
