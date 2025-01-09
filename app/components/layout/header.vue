@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import { ApiEndpoint } from '~/enums/api-endpoint';
+
+const { data } = await useAPI(ApiEndpoint.STATS);
+
+interface stats {
+  own: number;
+  addons: number;
+  hours: number;
+  games: number;
+}
+
+const stats = data.value as stats;
+
 const navigationItems = ref([
   {
     name: 'Startseite',
@@ -12,27 +25,26 @@ const navigationItems = ref([
     name: 'Spieltipps',
     to: { name: 'games' },
   },
-])
+]);
 
 const logoLevelItems = ref([
   {
     heading: 'Brettspiele in Besitz',
-    title: '15+',
+    title: stats.own ? stats.own + '+' : 0,
   },
   {
     heading: 'Erweiterungen in Besitz',
-    title: '1+',
+    title: stats.addons ? stats.addons + '+' : 0,
   },
   {
     heading: 'Gespielte Stunden',
-    title: '500+',
+    title: stats.hours ? stats.hours + '+' : 0,
   },
   {
     heading: 'Rezensionen',
-    // TODO add results from games count store
-    title: 0 // gamesCount,
+    title: stats.games ?? 0,
   },
-])
+]);
 </script>
 
 <template>

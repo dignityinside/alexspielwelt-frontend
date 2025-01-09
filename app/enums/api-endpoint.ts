@@ -1,4 +1,8 @@
 export enum ApiEndpoint {
+  /**
+   * GAMES
+   */
+
   // Games - Admin list of games
   GAMES_ADMIN = '/games/admin',
 
@@ -20,6 +24,16 @@ export enum ApiEndpoint {
   // Games - Get a list of all genres
   GAMES_GENRES = 'games/genres/all',
 
+  /**
+   * AUTH
+   */
+
   // Login user via server api
   LOGIN = '/api/login',
+
+  /**
+   * STATS
+   */
+
+  STATS = 'stats',
 }
