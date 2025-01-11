@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Import package which are not autoloaded
-import * as yup from 'yup';
-import { useField, useForm } from 'vee-validate';
+import { object, string, type InferType } from 'yup';
+import type { FormSubmitEvent } from '#ui/types';
 import { ApiEndpoint } from '~/enums/api-endpoint';
 const { loggedIn, fetch: refreshSession } = useUserSession();
 
@@ -15,29 +15,27 @@ if (loggedIn.value) {
 }
 
 // Form validation rules
-const validationSchema = yup.object({
-  username: yup
-    .string()
+const schema = object({
+  username: string()
     .min(4, 'Benutername muss mindestens 4 Zeichen lang sein')
     .required('Benutzername ist erforderlich'),
-  password: yup
-    .string()
+  password: string()
     .min(5, 'Passwort muss mindestens 5 Zeichen lang sein')
     .required('Passwort ist erforderlich'),
 });
 
-// Vee-Validate Setup
-const { handleSubmit, errors } = useForm({ validationSchema });
-const { value: username } = useField<string>('username');
-const { value: password } = useField<string>('password');
+type Schema = InferType<typeof schema>;
 
-const apiError = ref(false);
+const state = reactive({
+  username: undefined,
+  password: undefined,
+});
 
 // Login user
-const onSubmit = handleSubmit(async (values) => {
+async function onSubmit(event: FormSubmitEvent<Schema>) {
   $fetch(ApiEndpoint.LOGIN, {
     method: 'POST',
-    body: values,
+    body: event.data,
   })
     .then(async () => {
       // Refresh the session on client-side
@@ -47,43 +45,57 @@ const onSubmit = handleSubmit(async (values) => {
       await navigateTo({ name: 'profile' });
     })
     .catch((e) => {
-      apiError.value = true;
+      const toast = useToast();
+
+      toast.add({
+        id: 'wrong-username-password',
+        title: 'Login oder Passwort sind falsch.',
+        timeout: 3000,
+      });
     });
-});
+}
+
+// Toggle show/hide password
+
+const isPasswordVisible = ref(false);
+
+const togglePasswordVisibility = () => {
+  isPasswordVisible.value = !isPasswordVisible.value;
+};
 </script>
 
 <template>
-  <div>
-    <h1 class="title has-text-centered">Anmelden</h1>
+  <u-container>
+    <div class="grid place-items-center">
+      <u-card class="prose">
+        <h1>Anmelden</h1>
 
-    <layout-notification v-if="apiError" message="Login oder Passwort sind falsch." />
+        <u-notifications />
 
-    <div class="columns is-centered">
-      <div class="column is-4">
-        <form @submit.prevent="onSubmit">
-          <ui-input
-            type="text"
-            name="username"
-            label="Benutzername"
-            autocomplete="username"
-            icon-left="fa-solid fa-user"
-            v-model="username"
-            :error-message="errors.username"
-          />
+        <u-form :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+          <u-form-group label="Benutzername" name="username">
+            <u-input v-model="state.username" icon="material-symbols:account-box" />
+          </u-form-group>
 
-          <ui-password
-            name="password"
-            label="Password"
-            icon="fa-solid fa-key"
-            v-model="password"
-            :error-message="errors.password"
-          />
+          <u-form-group label="Password" name="password">
+            <u-input
+              :type="isPasswordVisible ? 'text' : 'password'"
+              v-model="state.password"
+              icon="material-symbols:key"
+            >
+              <template #trailing>
+                <u-icon
+                  :name="isPasswordVisible ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                  @click="togglePasswordVisibility"
+                  class="is-clickable"
+                />
+              </template>
+            </u-input>
+          </u-form-group>
 
-          <div class="field is-grouped is-grouped-centered pt-3">
-            <ui-button type="submit" layout="is-primary">Anmelden</ui-button>
-          </div>
-        </form>
-      </div>
+          <u-button type="submit" icon="material-symbols:lock-open">Anmelden</u-button>
+        </u-form>
+      </u-card>
     </div>
-  </div>
+  </u-container>
 </template>

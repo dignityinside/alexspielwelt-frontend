@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import * as yup from 'yup';
-import { useField, useForm } from 'vee-validate';
+import { object, string, number, array, type InferType } from 'yup';
 import type { Game, GameGenre } from '~/types';
 import { GameStatus, GameStatusLabels } from '~/enums/game-status';
 import { ApiEndpoint } from '~/enums/api-endpoint';
+import type { FormSubmitEvent } from '#ui/types';
 
 // Init route, store
 const route = useRoute();
@@ -13,54 +13,36 @@ const slugId = route.params.slug;
 // Select mode (add/edit)
 const isEdit = ref(route.params.slug !== undefined);
 
-const initialValues = {
-  title: '',
-  description: '',
-  intro: '',
-  slug: '',
-  slogan: '',
-  status: GameStatus.DRAFT,
-  img: '',
-  link: '',
-  publisher: '',
-  releaseYear: 0,
-  players: '',
-  playTime: '',
-  genre: '',
-  rating: '',
-  difficulty: '',
-  recommendedAge: '',
-  award: '',
-  gameDesigner: '',
-  metaTitle: '',
-  metaDescription: '',
-  genres: [] as number[],
-};
-
-const validationSchema = yup.object({
-  title: yup.string().required('Der Titel ist erforderlich'),
-  slug: yup.string().nullable(),
-  intro: yup.string().nullable(),
-  description: yup.string().nullable(),
-  slogan: yup.string().nullable(),
-  status: yup.string().nullable(),
-  img: yup.string().nullable().required('Das Bild ist erforderlich'),
-  link: yup.string().nullable(),
-  publisher: yup.string().nullable(),
-  releaseYear: yup.number().nullable(),
-  players: yup.string().nullable(),
-  playTime: yup.string().nullable(),
-  genres: yup.array().of(yup.number()).nullable(),
-  rating: yup.string().nullable(),
-  difficulty: yup.string().nullable(),
-  recommendedAge: yup.string().nullable(),
-  award: yup.string().nullable(),
-  gameDesigner: yup.string().nullable(),
-  metaTitle: yup.string().nullable(),
-  metaDescription: yup.string().nullable(),
+// Form validation rules
+const schema = object({
+  title: string().required('Der Titel ist erforderlich'),
+  slug: string().nullable(),
+  intro: string().nullable(),
+  description: string().nullable(),
+  slogan: string().nullable(),
+  status: string().nullable(),
+  img: string().nullable().required('Das Bild ist erforderlich'),
+  link: string().nullable(),
+  publisher: string().nullable(),
+  releaseYear: number().nullable(),
+  players: string().nullable(),
+  playTime: string().nullable(),
+  genres: array().of(number()).nullable(),
+  rating: string().nullable(),
+  difficulty: string().nullable(),
+  recommendedAge: string().nullable(),
+  award: string().nullable(),
+  gameDesigner: string().nullable(),
+  metaTitle: string().nullable(),
+  metaDescription: string().nullable(),
 });
 
-const { handleSubmit, errors, resetForm } = useForm({ validationSchema });
+type Schema = InferType<typeof schema>;
+
+// Set initial state
+const state = reactive(
+  Object.fromEntries(Object.keys(schema.fields).map((key) => [key, undefined])),
+);
 
 // Get data from api
 const { data } = await useAPI(ApiEndpoint.GAMES_ADMIN_EDIT_FORM + slugId);
@@ -70,7 +52,7 @@ const game = computed(() => data.value as Game);
 onMounted(async () => {
   if (isEdit.value) {
     const filteredValues = Object.fromEntries(
-      Object.entries(game.value).filter(([key]) => key in initialValues),
+      Object.entries(game.value).filter(([key]) => key in state),
     );
 
     // Map genres to ids
@@ -78,252 +60,132 @@ onMounted(async () => {
       filteredValues.genres = filteredValues.genres.map((genre) => genre.id);
     }
 
-    resetForm({ values: filteredValues });
+    Object.assign(state, filteredValues);
   }
 });
 
 // Send data to backend
-const onSubmit = handleSubmit(async (values) => {
-  if (isEdit.value) {
-    // edit game
-    await useAPI(ApiEndpoint.GAMES_ADMIN_EDIT + slugId, {
-      method: 'PATCH',
-      body: values,
-    })
-      .then(async () => {
-        navigateTo({ name: 'games.admin' });
-      })
-      .catch((e) => {});
-  } else {
-    // new game
-    await useAPI(ApiEndpoint.GAMES_ADMIN_ADD, {
-      method: 'POST',
-      body: values,
-    })
-      .then(async () => {
-        navigateTo({ name: 'games.admin' });
-      })
-      .catch((e) => {});
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  const endpoint = isEdit.value
+    ? ApiEndpoint.GAMES_ADMIN_EDIT + slugId
+    : ApiEndpoint.GAMES_ADMIN_ADD;
+
+  const method = isEdit.value ? 'PATCH' : 'POST';
+
+  try {
+    await useAPI(endpoint, { method, body: event.data });
+    navigateTo({ name: 'games.admin' });
+  } catch (error) {
+    // Uncomment for debugging
+    // console.error('Submit failed', error);
   }
-});
+}
 
-const { value: title } = useField<string>('title');
-const { value: slug } = useField<string>('slug');
-const { value: intro } = useField<string>('intro');
-const { value: description } = useField<string>('description');
-const { value: slogan } = useField<string>('slogan');
-const { value: status } = useField<string>('status');
-const { value: img } = useField<string>('img');
-const { value: link } = useField<string>('link');
-const { value: publisher } = useField<string>('publisher');
-const { value: releaseYear } = useField<number>('releaseYear');
-const { value: players } = useField<string>('players');
-const { value: playTime } = useField<string>('playTime');
-const { value: genres } = useField<number[]>('genres');
-const { value: rating } = useField<number>('rating');
-const { value: difficulty } = useField<number>('difficulty');
-const { value: recommendedAge } = useField<string>('recommendedAge');
-const { value: award } = useField<string>('award');
-const { value: gameDesigner } = useField<string>('gameDesigner');
-const { value: metaTitle } = useField<string>('metaTitle');
-const { value: metaDescription } = useField<string>('metaDescription');
-
+// Map status
 const statusOptions = computed(() => {
   return Object.entries(GameStatus).map(([key, value]) => ({
-    id: value,
+    value: value,
     name: GameStatusLabels[value],
   }));
 });
 
 // Fetch game genres from API
-const { data: gameGenreItems } = await useAPI(ApiEndpoint.GAMES_GENRES);
-const genresOptions = computed(() => (gameGenreItems.value as GameGenre[]) ?? ([] as GameGenre[]));
+const { data: gameGenreItems } = await useAPI<GameGenre[]>(ApiEndpoint.GAMES_GENRES);
 
-if (!genres.value) {
-  genres.value = [];
-}
+const genresOptions = computed(() => {
+  return gameGenreItems.value?.map((genre) => ({ id: genre.id, name: genre.name })) || [];
+});
+
+// Define field type
+type Field = {
+  name: string;
+  label: string;
+  grid: string;
+  type: 'input' | 'textarea' | 'multi-select' | 'select';
+  rows?: number;
+  selectOption?: { name: string; value: string }[];
+  multiSelectOptions?: { id: string; name: string }[];
+};
+
+// Define form fields
+const fields = ref<Field[]>([
+  { name: 'title', label: 'Titel', grid: 'sm:col-span-6', type: 'input' },
+  { name: 'slug', label: 'Slug', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'publisher', label: 'Verlag', grid: 'sm:col-span-2', type: 'input' },
+  {
+    name: 'genres',
+    label: 'Genres',
+    grid: 'sm:col-span-2',
+    type: 'multi-select',
+    multiSelectOptions: genresOptions.value,
+  },
+  { name: 'slogan', label: 'Slogan', grid: 'sm:col-span-12', type: 'input' },
+  { name: 'img', label: 'Bild URL', grid: 'sm:col-span-6', type: 'input' },
+  { name: 'gameDesigner', label: 'Entworfen von', grid: 'sm:col-span-3', type: 'input' },
+  { name: 'releaseYear', label: 'Erstmals veröffentlicht', grid: 'sm:col-span-3', type: 'input' },
+  { name: 'recommendedAge', label: 'Empfohlenes Alter', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'players', label: 'Spieler', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'playTime', label: 'Dauer', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'difficulty', label: 'Komplexität', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'intro', label: 'Intro Text', grid: 'sm:col-span-12', type: 'textarea', rows: 2 },
+  { name: 'description', label: 'Beschreibung', grid: 'sm:col-span-12', type: 'textarea', rows: 5 },
+  { name: 'link', label: 'Amazon Link', grid: 'sm:col-span-6', type: 'input' },
+  { name: 'award', label: 'Auszeichnungen', grid: 'sm:col-span-3', type: 'input' },
+  { name: 'rating', label: 'Bewertung', grid: 'sm:col-span-3', type: 'input' },
+  { name: 'metaTitle', label: 'MetaTitle', grid: 'sm:col-span-6', type: 'input' },
+  { name: 'metaDescription', label: 'MetaDescription', grid: 'sm:col-span-6', type: 'input' },
+  {
+    name: 'status',
+    label: 'Status',
+    grid: 'sm:col-span-2',
+    type: 'select',
+    selectOption: statusOptions.value,
+  },
+]);
 </script>
 
 <template>
-  <div>
-    <div class="section">
-      <h1 class="title has-text-centered">Spieltipp {{ isEdit ? 'bearbeiten' : 'hinzufügen' }}</h1>
-    </div>
-    <form novalidate @submit.prevent="onSubmit">
-      <div class="columns is-multiline">
-        <div class="column is-6">
-          <ui-input name="title" label="Titel" v-model="title" :error-message="errors.title" />
+  <layout-content>
+    <h1>Spieltipp {{ isEdit ? 'bearbeiten' : 'hinzufügen' }}</h1>
+
+    <u-form :schema="schema" :state="state" @submit="onSubmit">
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-6">
+        <div v-for="field in fields" :key="field.name" :class="field.grid" class="col-span-12">
+          <u-form-group :label="field.label" :name="field.name">
+            <template v-if="field.type === 'input'">
+              <u-input v-model="state[field.name]" />
+            </template>
+
+            <template v-if="field.type === 'textarea'">
+              <u-textarea v-model="state[field.name]" size="xl" :rows="field.rows" autoresize />
+            </template>
+
+            <template v-if="field.type === 'multi-select'">
+              <select v-model="state[field.name]" multiple>
+                <option
+                  v-for="option in field.multiSelectOptions"
+                  :key="option.id"
+                  :value="option.id"
+                >
+                  {{ option.name }}
+                </option>
+              </select>
+            </template>
+
+            <template v-if="field.type === 'select'">
+              <u-select
+                v-model="state[field.name]"
+                :options="field.selectOption"
+                option-attribute="name"
+              />
+            </template>
+          </u-form-group>
         </div>
 
-        <div class="column is-2">
-          <ui-input name="slug" label="Slug" v-model="slug" :error-message="errors.slug" />
-        </div>
-
-        <div class="column is-2">
-          <ui-input
-            name="publisher"
-            label="Verlag"
-            v-model="publisher"
-            :error-message="errors.publisher"
-          />
-        </div>
-
-        <div class="column is-2">
-          <div class="field">
-            <div class="label">Spielgenres</div>
-            <div class="control">
-              <div class="select is-multiple">
-                <select v-model="genres" multiple>
-                  <option v-for="option in genresOptions" :key="option.id" :value="option.id">
-                    {{ option.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <p v-if="errors.genres" class="help is-danger">
-              {{ errors.genres }}
-            </p>
-          </div>
-        </div>
-
-        <div class="column is-12">
-          <ui-input name="slogan" label="Slogan" v-model="slogan" :error-message="errors.slogan" />
-        </div>
-
-        <div class="column is-6">
-          <ui-input name="img" label="Bild URL" v-model="img" :error-message="errors.img" />
-        </div>
-
-        <div class="column is-3">
-          <ui-input
-            name="gameDesigner"
-            label="Entworfen von"
-            v-model="gameDesigner"
-            :error-message="errors.gameDesigner"
-          />
-        </div>
-
-        <div class="column is-3">
-          <ui-input
-            name="releaseYear"
-            label="Erstmals veröffentlicht"
-            v-model="releaseYear"
-            :error-message="errors.releaseYear"
-          />
-        </div>
-
-        <div class="column is-2">
-          <ui-input
-            name="recommendedAge"
-            label="Empfohlenes Alter"
-            v-model="recommendedAge"
-            :error-message="errors.recommendedAge"
-          />
-        </div>
-
-        <div class="column is-2">
-          <ui-input
-            name="players"
-            label="Spieler"
-            v-model="players"
-            :error-message="errors.players"
-          />
-        </div>
-
-        <div class="column is-2">
-          <ui-input
-            name="playTime"
-            label="Dauer"
-            v-model="playTime"
-            :error-message="errors.playTime"
-          />
-        </div>
-
-        <div class="column is-2">
-          <ui-input
-            name="difficulty"
-            label="Komplexität"
-            v-model="difficulty"
-            :error-message="errors.difficulty"
-          />
-        </div>
-
-        <div class="column is-12">
-          <ui-textarea
-            name="intro"
-            label="Intro Text"
-            v-model="intro"
-            :rows="5"
-            :error-message="errors.intro"
-          />
-        </div>
-
-        <div class="column is-12">
-          <ui-textarea
-            name="description"
-            label="Beschreibung"
-            v-model="description"
-            :rows="10"
-            :error-message="errors.description"
-          />
-        </div>
-
-        <div class="column is-6">
-          <ui-input
-            name="award"
-            label="Auszeichnungen"
-            v-model="award"
-            :error-message="errors.award"
-          />
-        </div>
-
-        <div class="column is-6">
-          <ui-input
-            name="rating"
-            label="Bewertung"
-            v-model="rating"
-            :error-message="errors.rating"
-          />
-        </div>
-
-        <div class="column is-12">
-          <ui-input name="link" label="Amazon URL" v-model="link" :error-message="errors.link" />
-        </div>
-
-        <div class="column is-6">
-          <ui-input
-            name="metaTitle"
-            label="Meta Title"
-            v-model="metaTitle"
-            :error-message="errors.metaTitle"
-          />
-        </div>
-
-        <div class="column is-6">
-          <ui-input
-            name="metaDescription"
-            label="Meta Description"
-            v-model="metaDescription"
-            :error-message="errors.metaDescription"
-          />
-        </div>
-
-        <div class="column is-12">
-          <ui-select
-            name="status"
-            label="Status"
-            v-model="status"
-            :options="statusOptions"
-            :error-message="errors.status"
-          />
-        </div>
-
-        <div class="column is-12">
-          <div class="field is-grouped pt-3">
-            <ui-button layout="is-primary"> Speichern </ui-button>
-          </div>
+        <div class="col-span-12">
+          <u-button type="submit" size="lg">Speichern</u-button>
         </div>
       </div>
-    </form>
-  </div>
+    </u-form>
+  </layout-content>
 </template>

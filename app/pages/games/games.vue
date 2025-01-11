@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Game } from '~/types';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ApiEndpoint } from '~/enums/api-endpoint';
 
 useSeoMeta({
@@ -104,12 +103,6 @@ const filteredGames = computed(() => {
 
   return result;
 });
-
-const isVisible = ref(true);
-
-const toggleVisibility = () => {
-  isVisible.value = !isVisible.value;
-};
 </script>
 
 <template>
@@ -119,129 +112,140 @@ const toggleVisibility = () => {
     <div v-if="status === 'error' && games">Fehler beim Laden: {{ error.message }}</div>
 
     <div>
+      <layout-hero>
+        <template #title> #Spieltipps </template>
+        <template #subtitle> Ich helfe dir, das perfekte Brettspiel zu finden! </template>
+      </layout-hero>
+
       <template v-if="games && games.length > 0">
-        <section class="section is-medium has-text-centered">
-          <h1 class="title">#Spieltipps</h1>
-          <h2 class="subtitle">Ich helfe dir, das perfekte Brettspiel zu finden!</h2>
-        </section>
+        <section class="bg-gray-100 p-8">
+          <h3 class="text-xl text-center font-bold pb-4">Filter</h3>
 
-        <section class="hero is-light">
-          <button @click="toggleVisibility" class="button is-light">
-            Filter {{ isVisible ? 'Verbergen' : 'Anzeigen' }}
-          </button>
-
-          <div v-show="isVisible" class="hero-body">
-            <div class="columns is-multiline is-centered has-text-centered">
-              <div class="column is-3">
+          <div>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-24">
+              <div>
                 Bewertung:
                 <span v-if="filters.rating > 0">
                   {{ filters.rating }} <ui-stars :stars="Number(filters.rating)" />
                 </span>
                 <span v-else>Alle</span>
-                <ui-range name="rating" v-model="filters.rating" @input="updateSliderValue" />
+                <u-range
+                  name="rating"
+                  :max="5"
+                  v-model="filters.rating"
+                  @input="updateSliderValue"
+                  class="py-6"
+                />
               </div>
 
-              <div class="column is-3">
+              <div>
                 Empfohlenes Alter:
                 <span v-if="filters.recommendedAge > 0">
-                  ab {{ filters.recommendedAge }} <font-awesome-icon icon="fa-circle-user" />
+                  ab {{ filters.recommendedAge }} <u-icon name="fa6-solid:circle-user" />
                 </span>
                 <span v-else>Alle</span>
-                <ui-range
-                  name="difficulty"
+                <u-range
+                  name="recommendedAge"
                   :max="18"
                   v-model="filters.recommendedAge"
                   @input="updateSliderValue"
+                  class="py-6"
                 />
               </div>
-            </div>
 
-            <div class="columns is-multiline is-centered has-text-centered">
-              <div class="column is-3">
+              <div>
                 Spieleranzahl:
                 <span v-if="filters.players > 0">
-                  ab {{ filters.players }} Spieler <font-awesome-icon icon="fa-users" />
+                  ab {{ filters.players }} Spieler <u-icon name="fa6-solid:users" />
                 </span>
                 <span v-else>Alle</span>
-                <ui-range
+                <u-range
                   name="players"
                   :max="12"
                   v-model="filters.players"
                   @input="updateSliderValue"
+                  class="py-6"
                 />
               </div>
 
-              <div class="column is-3">
+              <div>
                 Dauer:
                 <span v-if="filters.playTime > 0">
-                  bis {{ filters.playTime }} Stunde <font-awesome-icon icon="fa fa-clock" />
+                  bis {{ filters.playTime }} Stunde <u-icon name="fa6-solid:clock" />
                 </span>
                 <span v-else>Alle</span>
-                <ui-range
+                <u-range
                   name="playTime"
                   :max="12"
                   v-model="filters.playTime"
                   @input="updateSliderValue"
+                  class="py-6"
                 />
               </div>
 
-              <div class="column is-3">
+              <div>
                 Komplexität:
                 <span v-if="filters.difficulty > 0">
                   <span v-if="filters.difficulty <= 9">ab</span>
-                  {{ filters.difficulty }} <font-awesome-icon icon="fa-chess-rook" />
+                  {{ filters.difficulty }} <u-icon name="fa6-solid:chess-rook" />
                 </span>
                 <span v-else>Alle</span>
-                <ui-range
+                <u-range
                   name="difficulty"
                   :max="10"
                   v-model="filters.difficulty"
                   @input="updateSliderValue"
+                  class="py-6"
                 />
-              </div>
-
-              <div class="column is-12">
-                <ui-button @click="clearFilters" text="Filter löschen" class="is-light is-danger" />
               </div>
             </div>
 
-            <div class="columns is-multiline is-centered">
-              <div class="column is-6">
-                <ui-input
+            <div class="flex justify-center my-4">
+              <div>
+                <u-button @click="clearFilters"> Filter löschen </u-button>
+              </div>
+            </div>
+
+            <div class="flex justify-center">
+              <div class="w-full sm:w-1/3">
+                <u-input
                   v-model="filters.searchQuery"
-                  @clear="clearSearch"
-                  :clear-icon="true"
                   name="search"
-                  label="Suche"
-                  icon-left="fa-search"
-                />
+                  icon="material-symbols:search-rounded"
+                  size="lg"
+                >
+                  <template #trailing>
+                    <u-icon
+                      name="material-symbols:cancel-outline-rounded"
+                      @click="clearSearch"
+                      class="cursor-pointer"
+                      style="pointer-events: all"
+                    />
+                  </template>
+                </u-input>
               </div>
             </div>
           </div>
         </section>
 
-        <hr />
-
-        <div v-if="filteredGames.length" class="columns is-multiline has-text-centered">
+        <div
+          v-if="filteredGames.length"
+          class="grid grid-col sm:grid-cols-2 md:grid-cols-4 gap-2 my-8"
+        >
           <div
             v-for="game in filteredGames"
             :key="game.slug"
             @click="openGame(game.slug)"
-            class="game column is-one-fifth mx-2 my-2"
+            class="game mx-2 my-2"
           >
             <img :src="game.img" :alt="game.title" :title="game.title" class="image" />
-            <p class="content mt-2">{{ game.title }}</p>
+            <p>{{ game.title }}</p>
           </div>
         </div>
-        <div v-else>Keine Ergebnisse gefunden.</div>
+        <div v-else class="py-8 text-center">Keine Ergebnisse gefunden.</div>
       </template>
-      <template v-else>Keine Spieltipps gefunden.</template>
-      <hr />
+      <div v-else class="py-8 text-center">Keine Spieltipps gefunden.</div>
     </div>
-
-    <p v-if="status === 'success' && (!games || gamesStore.gamesCount === 0)">
-      Keine Spiele verfügbar.
-    </p>
   </div>
 </template>
 

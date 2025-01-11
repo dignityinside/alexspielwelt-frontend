@@ -2,72 +2,59 @@
 const { loggedIn } = useUserSession();
 const { isAdmin } = useUserRoles();
 
-interface Item {
-  name: string;
-  to: { name: string };
-}
+const items = [
+  {
+    label: 'Startseite',
+    icon: 'i-heroicons-home',
+    to: { name: 'home' },
+  },
+  {
+    label: 'Über mich',
+    icon: 'material-symbols:account-circle',
+    to: { name: 'about' },
+  },
+  {
+    label: 'Spieltipps',
+    icon: 'material-symbols:tips-and-updates',
+    to: { name: 'games' },
+  },
+  {
+    label: 'Admin-Spieltipps',
+    icon: 'material-symbols:edit-square-outline',
+    to: { name: 'games.admin' },
+    auth: true,
+    admin: true,
+  },
+  {
+    label: 'Profil',
+    icon: 'material-symbols:settings-account-box-outline-rounded',
+    to: { name: 'profile' },
+    auth: true,
+  },
+];
 
-defineProps<{
-  items: Item[];
-}>();
+const filteredItems = computed(() =>
+  items.filter((item) => {
+    if (item.auth && !loggedIn.value) {
+      return false;
+    }
 
-// Logout user
-const { logoutUser } = useLogoutUser();
-const onLogoutUser = () => logoutUser();
+    return !(item.admin && !isAdmin());
+  }),
+);
 
-// Initial value for navigation (relevant only mobile)
 const isOpen = ref(false);
 </script>
 
 <template>
-  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-    <div class="container">
-      <div class="navbar-brand">
-        <a
-          role="button"
-          class="navbar-burger"
-          aria-label="menu"
-          data-target="burgerNavigation"
-          :aria-expanded="false"
-          @click="isOpen = !isOpen"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
+  <u-horizontal-navigation class="hidden sm:flex" :links="filteredItems" :space="4" />
 
-      <div id="burgerNavigation" class="navbar-menu" :class="{ 'is-active': isOpen }">
-        <div class="navbar-start">
-          <template v-for="item in items" :key="item.name">
-            <nuxt-link :to="item.to" active-class="is-active" class="navbar-item">
-              <span>{{ item.name }}</span>
-            </nuxt-link>
-          </template>
-        </div>
-
-        <div v-if="loggedIn" class="navbar-end">
-          <div v-if="isAdmin()" class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">Admin</a>
-            <div class="navbar-dropdown">
-              <nuxt-link :to="{ name: 'games.admin' }" class="navbar-item">
-                <span>Spieltipps</span>
-              </nuxt-link>
-            </div>
-          </div>
-          <div class="navbar-item">
-            <div class="buttons">
-              <nuxt-link :to="{ name: 'profile' }" class="navbar-item">
-                <span>Profile</span>
-              </nuxt-link>
-              <a class="navbar-item" @click="onLogoutUser()">
-                <span>Logout</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <div class="sm:hidden">
+    <button class="p-4 bg-gray-100 rounded" @click="isOpen = !isOpen" aria-label="Menu">
+      <u-icon name="fa6-solid:bars"></u-icon>
+    </button>
+    <span v-show="isOpen">
+      <u-vertical-navigation :links="filteredItems" class="py-4" />
+    </span>
+  </div>
 </template>

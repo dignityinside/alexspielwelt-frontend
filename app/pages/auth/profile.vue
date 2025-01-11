@@ -22,11 +22,13 @@ const onLogoutUser = () => logoutUser();
 </script>
 
 <template>
-  <div>
-    <section v-if="loggedIn" class="section is-medium has-text-centered">
-      <h1 class="title">Hallo, {{ user.name }}!</h1>
-      <p class="content">{{ $formatDate(session.loggedInAt.toString()) }}</p>
-      <ui-button type="button" text="Logout" @click="onLogoutUser" />
-    </section>
-  </div>
+  <u-container>
+    <div class="grid place-items-center">
+      <u-card v-if="loggedIn" class="prose">
+        <h1>Hallo, {{ user.name }}!</h1>
+        <p>{{ $formatDate(session.loggedInAt.toString()) }}</p>
+        <u-button type="button" icon="material-symbols:lock" @click="onLogoutUser">Logout</u-button>
+      </u-card>
+    </div>
+  </u-container>
 </template>

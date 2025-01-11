@@ -11,65 +11,62 @@ function redirectToGames() {
 
 <template>
   <div>
-    <section class="section is-medium has-text-centered">
-      <h1 class="title">Willkommen!</h1>
-      <h2 class="subtitle">
+    <layout-hero>
+      <template #title> Willkommen! </template>
+      <template #subtitle>
         Entdecke die Welt der Brettspiele und finde dein neues Lieblingsspiel.
-      </h2>
-      <ui-button
-        text="Jetzt dein nächstes Brettspiel entdecken"
-        layout="is-light is-danger"
-        @click="redirectToGames"
-      />
-    </section>
+      </template>
+      <template #default>
+        <u-button @click="redirectToGames" size="lg">
+          Jetzt dein nächstes Brettspiel entdecken
+        </u-button>
+      </template>
+    </layout-hero>
 
-    <p class="title has-text-centered">Du kennst mich vielleicht aus ...</p>
-    <p class="content has-text-centered is-size-1">
-      <span class="mr-5"><font-awesome-icon icon="fa-brands fa-instagram" /></span>
-      <span><font-awesome-icon icon="fa-brands fa-threads" /></span>
-    </p>
+    <layout-section>
+      <template #title> Du kennst mich vielleicht aus ... </template>
+      <template #icons>
+        <span class="mr-5">
+          <u-icon name="simple-icons:instagram" />
+        </span>
+        <span>
+          <u-icon name="simple-icons:threads" />
+        </span>
+      </template>
+    </layout-section>
 
-    <section class="hero is-light is-halfheight">
-      <div class="hero-body">
-        <div>
-          <p class="title">Ich bin Alex,</p>
-          <p class="content">37 Jahre alt und arbeite als Webentwickler.</p>
-          <p class="content">
-            Um meinen Kopf freizubekommen, habe ich schon immer gerne Brettspiele gespielt – mal
-            mehr, mal weniger.
-          </p>
+    <layout-box>
+      <template #title> Ich bin Alex, </template>
+      <template #default>
+        <p>37 Jahre alt und arbeite als Webentwickler.</p>
+        <p>
+          Um meinen Kopf freizubekommen, habe ich schon immer gerne Brettspiele gespielt – mal mehr,
+          mal weniger.
+        </p>
+        <p>
+          Seit 2023 ist das analoge Spielen am Wochenende zu einem richtigen gemeinsamen Hobby mit
+          meinen Freunden geworden.
+        </p>
+        <p>
+          Fun Fact: Viele meiner Hobbys fangen mit „B“ an: Brettspiele, Bücher lesen und Bloggen. 😊
+        </p>
+        <p>
+          Ich freue mich riesig darauf, euch für die Welt der Brettspiele zu begeistern und hoffe,
+          euch ein paar coole Spiele zeigen zu können.
+        </p>
+        <p>Über ein Abo und euer Feedback auf Instagram oder Threads würde ich mich sehr freuen!</p>
+        <p>Euer Freund, Alex</p>
+      </template>
+    </layout-box>
 
-          <p class="content">
-            Seit 2023 ist das analoge Spielen am Wochenende zu einem richtigen gemeinsamen Hobby mit
-            meinen Freunden geworden.
-          </p>
-
-          <p class="content">
-            Fun Fact: Viele meiner Hobbys fangen mit „B“ an: Brettspiele, Bücher lesen und Bloggen.
-            😊
-          </p>
-
-          <p class="content">
-            Ich freue mich riesig darauf, euch für die Welt der Brettspiele zu begeistern und hoffe,
-            euch ein paar coole Spiele zeigen zu können.
-          </p>
-
-          <p class="content">
-            Über ein Abo und euer Feedback auf Instagram oder Threads würde ich mich sehr freuen!
-          </p>
-
-          <p class="content">Euer Freund, Alex</p>
-        </div>
-      </div>
-    </section>
-
-    <p class="title has-text-centered mt-5">Werde Teil meiner Community, wenn …</p>
-    <p class="content has-text-centered">… du genauso viel Liebe für Brettspiele hast wie ich</p>
-    <p class="content has-text-centered">… du spannende Herausforderungen suchst</p>
-    <p class="content has-text-centered">
-      … deine wertvolle Zeit in wirklich gute Brettspiele investieren möchtest
-    </p>
-
-    <p class="content has-text-centered">Viel Spaß beim Stöbern!</p>
+    <layout-section>
+      <template #title> Werde Teil meiner Community, wenn … </template>
+      <template #default>
+        <p>… du genauso viel Liebe für Brettspiele hast wie ich</p>
+        <p>… du spannende Herausforderungen suchst</p>
+        <p>… deine wertvolle Zeit in wirklich gute Brettspiele investieren möchtest</p>
+        <p>Viel Spaß beim Stöbern!</p>
+      </template>
+    </layout-section>
   </div>
 </template>

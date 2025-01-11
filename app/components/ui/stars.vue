@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
 defineProps({
   stars: {
     required: true,
@@ -11,5 +9,5 @@ defineProps({
 </script>
 
 <template>
-  <font-awesome-icon v-for="n in stars" :key="n" icon="fa-star" class="has-text-warning" />
+  <u-icon v-for="n in stars" :key="n" name="fa6-solid:star" class="text-yellow-400" />
 </template>

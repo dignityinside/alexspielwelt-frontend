@@ -23,21 +23,18 @@ export default defineNuxtConfig({
     ],
     '@nuxt/eslint',
     'nuxt-auth-utils',
+    '@nuxt/ui',
   ],
 
   imports: {
     dirs: ['stores'],
   },
 
-  build: {
-    transpile: ['@fortawesome/vue-fontawesome'],
-  },
-
   runtimeConfig: {
     public: {
       baseURL: 'http://localhost:3001',
       name: 'Alex Spielwelt',
-      slogan: 'Spiel-Empfehlungen & Einblicke',
+      slogan: 'Empfehlungen & Einblicke',
       instagram: '@alexspielwelt',
       address: 'Max Mustermann, Musterstr. 123, 12345 Musterstadt',
       email: 'mustermann@example.com',

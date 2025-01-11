@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { $storage } = useNuxtApp()
+const { $storage } = useNuxtApp();
 
-const isOpen = ref(false)
+const isOpen = ref(false);
 
 const updateCookies = (value: string) => {
   if (import.meta.client) {
@@ -22,42 +22,25 @@ onMounted(() => {
 
 <template>
   <teleport to="body">
-    <div class="cookie-banner notification" :class="{ 'is-open': isOpen }">
-      <button class="delete" @click="rejectCookie"></button>
-      Ich setze Cookies ein, um dein Erlebnis auf der Website zu verbessern. Mehr dazu in
-      <nuxt-link :to="{ name: 'privacy' }">Datenschutzerklärung</nuxt-link>
-      <div class="buttons">
-        <button @click="acceptCookies" class="button is-success">Okay</button>
-        <button @click="rejectCookie" class="button is-danger">Nein</button>
+    <div
+      class="fixed bottom-0 right-0 z-[1000] max-w-[500px] hidden bg-gray-100 p-5 my-4 mx-4"
+      :class="{ 'is-open': isOpen }"
+    >
+      Ich setze Cookies ein, um dein Erlebnis auf der Website zu verbessern.
+      <div class="flex justify-center gap-2 py-2">
+        <div>
+          <u-button @click="acceptCookies">Okay</u-button>
+        </div>
+        <div>
+          <u-button @click="rejectCookie" color="red">Nein</u-button>
+        </div>
       </div>
     </div>
   </teleport>
 </template>
 
 <style scoped>
-.cookie-banner {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  text-align: center;
-  z-index: 1000;
-  margin: 20px;
-  max-width: 500px;
-  display: none;
-
-  a {
-    color: white;
-    text-decoration: underline;
-  }
-}
-
 .is-open {
   display: block;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
 }
 </style>

@@ -2,7 +2,7 @@
 
 Frontend for [Alex Spielwelt API](https://github.com/dignityinside/alexspielwelt-api)
 
-Made with ❤️ in [Nuxt 3](https://nuxt.com) & [Bulma CSS-Framework](https://bulma.io)
+Made with ❤️ in [Nuxt 3](https://nuxt.com) & [Nuxt UI](https://ui.nuxt.com/)
 
 ## Setup
 

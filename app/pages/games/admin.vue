@@ -2,54 +2,93 @@
 import type { Game } from '~/types';
 import { GameStatus, GameStatusLabels } from '~/enums/game-status';
 import { ApiEndpoint } from '~/enums/api-endpoint';
+const { $formatDate } = useNuxtApp();
 
-const { data } = await useAPI(ApiEndpoint.GAMES_ADMIN);
-const games = computed(() => data.value as Game[]);
+const { data: games } = await useAPI<Game[]>(ApiEndpoint.GAMES_ADMIN);
+
+const columns = [
+  {
+    key: 'id',
+    label: '#',
+    sortable: true,
+  },
+  {
+    key: 'title',
+    label: 'Titel',
+    sortable: true,
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    sortable: true,
+  },
+  {
+    key: 'date',
+    label: 'Datum',
+    sortable: true,
+  },
+  { key: 'actions', label: 'Aktionen' },
+];
+
+const rows = computed(() => {
+  return (
+    games.value?.map((game) => ({
+      id: game.id,
+      title: game.title,
+      status: game.status,
+      date: $formatDate(game.createdAt, true),
+      slug: game.slug,
+    })) || []
+  );
+});
+
+const q = ref('');
+
+const filteredRows = computed(() => {
+  if (!q.value) {
+    return rows.value;
+  }
+
+  // Filter the rows based on the search term
+  return rows.value.filter((row) => {
+    return Object.values(row).some((value) => {
+      return String(value).toLowerCase().includes(q.value.toLowerCase());
+    });
+  });
+});
 </script>
 
 <template>
-  <div>
-    <h1 class="title has-text-centered">Admin Spieltipps</h1>
-    <div class="content has-text-centered">
-      <nuxt-link :to="{ name: 'game.add' }">
-        <font-awesome-icon icon="fa fa-plus-circle" />
-        Hinzufügen
-      </nuxt-link>
+  <layout-content>
+    <div class="flex flex-col items-center">
+      <h1>Admin Spieltipps</h1>
+
+      <u-link :to="{ name: 'game.add' }">
+        <u-button icon="material-symbols:add-circle" class="is-clickable">Hinzufügen</u-button>
+      </u-link>
     </div>
-    <div v-if="games && games.length" class="table-container">
-      <table class="table is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th><abbr title="Id">#</abbr></th>
-            <th><abbr title="Title">Titel</abbr></th>
-            <th><abbr title="Status">Status</abbr></th>
-            <th><abbr title="Date">Datum</abbr></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="game in games" :key="game.id">
-            <th>{{ game.id }}</th>
-            <td>
-              <nuxt-link
-                v-if="game.status === GameStatus.PUBLIC"
-                :to="{ name: 'game', params: { slug: game.slug } }"
-              >
-                {{ game.title }}
-              </nuxt-link>
-              <span v-else>{{ game.title }}</span>
-            </td>
-            <td>{{ GameStatusLabels[game.status] }}</td>
-            <td>{{ $formatDate(game.createdAt, true) }}</td>
-            <td>
-              <nuxt-link :to="{ name: 'game.edit', params: { slug: game.slug } }">
-                Bearbeiten
-              </nuxt-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="py-8">
+      <u-input v-model="q" placeholder="Filter game..." />
     </div>
-    <div v-else>Keine Spieltipps gefunden.</div>
-  </div>
+
+    <u-table :columns="columns" :rows="filteredRows">
+      <template #title-data="{ row }">
+        <nuxt-link
+          v-if="row.status === GameStatus.PUBLIC"
+          :to="{ name: 'game', params: { slug: row.slug } }"
+        >
+          {{ row.title }}
+        </nuxt-link>
+      </template>
+
+      <template #status-data="{ row }">
+        {{ GameStatusLabels[row.status] }}
+      </template>
+
+      <template #actions-data="{ row }">
+        <nuxt-link :to="{ name: 'game.edit', params: { slug: row.slug } }"> Bearbeiten </nuxt-link>
+      </template>
+    </u-table>
+  </layout-content>
 </template>

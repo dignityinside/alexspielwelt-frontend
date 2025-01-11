@@ -40,114 +40,123 @@ watch(
 function onLinkClick(link: string) {
   window.open(link, '_blank');
 }
+
+const gameDetails = [
+  {
+    key: 'recommendedAge',
+    icon: 'fa6-solid:circle-user',
+    label: 'Empfohlenes Alter',
+  },
+  {
+    key: 'players',
+    icon: 'fa6-solid:users',
+    label: 'Spieler',
+  },
+  {
+    key: 'playTime',
+    icon: 'fa6-solid:clock',
+    label: 'Dauer',
+  },
+  {
+    key: 'difficulty',
+    icon: 'fa6-solid:chess-rook',
+    label: 'Komplexität',
+  },
+];
 </script>
 
 <template>
   <div>
     <div v-if="status === 'pending'">Lädt...</div>
 
-    <div v-if="status === 'error'">Fehler beim Laden: {{ error.message }}</div>
+    <div v-if="game">
+      <p class="text-center text-primary" v-if="loggedIn && isAdmin()">
+        <nuxt-link :to="{ name: 'game.edit', params: { slug } }">
+          <u-icon name="fa6-solid:pen-to-square" />
+          Bearbeiten
+        </nuxt-link>
+      </p>
 
-    <div v-if="status === 'success' && game">
-      <div>
-        <p class="has-text-centered" v-if="loggedIn && isAdmin()">
-          <nuxt-link :to="{ name: 'game.edit', params: { slug } }">
-            <font-awesome-icon icon="fa fa-pen-to-square" />
-            Bearbeiten
-          </nuxt-link>
-        </p>
-
-        <section class="section is-small has-text-centered">
-          <h1 v-if="game?.title" class="title">#{{ game.title }}</h1>
-
-          <h2 v-if="game?.publisher" class="subtitle">von {{ game.publisher }}</h2>
-        </section>
-
-        <section v-if="game?.slogan" class="section is-small has-text-centered">
-          <blockquote class="quote">
-            <h3 class="subtitle">&#8222;{{ game.slogan }}&#8221;</h3>
+      <layout-hero>
+        <template #title> #{{ game.title }} </template>
+        <template #subtitle v-if="game?.publisher"> von {{ game.publisher }} </template>
+        <template #default v-if="game?.slogan">
+          <blockquote>
+            <h3 class="text-lg py-8">&#8222;{{ game.slogan }}&#8221;</h3>
           </blockquote>
-        </section>
+        </template>
+      </layout-hero>
 
-        <div v-if="game?.img" class="columns is-centered is-vcentered">
-          <div class="column is-narrow">
-            <img :src="game.img" :alt="game.title" class="image img" />
-          </div>
-        </div>
-
-        <div class="content has-text-centered">
-          <p v-if="game?.gameDesigner">Entworfen von {{ game.gameDesigner }}</p>
-
-          <p v-if="game?.releaseYear">Erstmals veröffentlicht im Jahr {{ game.releaseYear }}</p>
-        </div>
-
-        <div class="content has-text-centered" v-dompurify-html="game.intro"></div>
-
-        <hr />
-
-        <nav class="level">
-          <div v-if="game?.recommendedAge" class="level-item has-text-centered">
-            <div>
-              <p class="title">
-                <font-awesome-icon icon="fa-circle-user" />
-              </p>
-              <p class="heading">Empfohlenes Alter</p>
-              <p class="title">{{ game.recommendedAge }}</p>
-            </div>
-          </div>
-          <div v-if="game?.players" class="level-item has-text-centered">
-            <div>
-              <p class="title">
-                <font-awesome-icon icon="fa fa-users" />
-              </p>
-              <p class="heading">Spieler</p>
-              <p class="title">{{ game.players }}</p>
-            </div>
-          </div>
-          <div v-if="game?.playTime" class="level-item has-text-centered">
-            <div>
-              <p class="title">
-                <font-awesome-icon icon="fa fa-clock" />
-              </p>
-              <p class="heading">Dauer</p>
-              <p class="title">{{ game.playTime }}</p>
-            </div>
-          </div>
-          <div v-if="game?.difficulty" class="level-item has-text-centered">
-            <div>
-              <p class="title">
-                <font-awesome-icon icon="fa-chess-rook" />
-              </p>
-              <p class="heading">Komplexität</p>
-              <p class="title">{{ game.difficulty }}</p>
-            </div>
-          </div>
-        </nav>
-
-        <hr />
-
-        <div class="content">
-          <div class="mx-4" v-if="game?.description" v-dompurify-html="game.description"></div>
-
-          <div v-if="game?.link" class="has-text-centered my-4">
-            <ui-button
-              text="Hier kommst du zum Brettspiel*"
-              iconLeft="fa-brands fa-amazon"
-              @click="onLinkClick(game.link)"
-            />
-
-            <p class="content mt-2">*Affiliate Link</p>
-          </div>
-        </div>
-
-        <hr />
-
-        <p class="content has-text-centered mt-2">
-          Veröffentlicht am {{ $formatDate(game.createdAt) }}
-        </p>
+      <div v-if="game?.img" class="flex justify-center py-8">
+        <img :src="game.img" :alt="game.title" />
       </div>
+
+      <p v-if="game?.gameDesigner" class="text-center py-4">
+        Entworfen von {{ game.gameDesigner }}
+      </p>
+
+      <p v-if="game?.releaseYear" class="text-center py-4">
+        Erstmals veröffentlicht im Jahr {{ game.releaseYear }}
+      </p>
+
+      <div class="content my-4" v-dompurify-html="game.intro"></div>
+
+      <u-divider />
+
+      <div class="grid grid-cols-4 sm:grid-cols-4 gap-2 text-center my-12">
+        <template v-for="detail in gameDetails" :key="detail.key">
+          <div v-if="game[detail.key]">
+            <div>
+              <div class="text-2xl sm:text-5xl pb-2">
+                <u-icon :name="detail.icon" />
+              </div>
+              <p>{{ detail.label }}</p>
+              <p class="text-xl sm:text-3xl font-bold">{{ game[detail.key] }}</p>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <hr />
+
+      <div class="content py-8">
+        <div v-if="game?.description" v-dompurify-html="game.description"></div>
+
+        <div class="text-center" v-if="game?.link">
+          <u-button @click="onLinkClick(game.link)" size="lg">
+            <u-icon name="fa6-brands:amazon" />
+            Hier kommst du zum Brettspiel*
+          </u-button>
+
+          <p>*Affiliate Link</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <p class="text-center my-4">Veröffentlicht am {{ $formatDate(game.createdAt) }}</p>
     </div>
 
-    <p v-if="status === 'success' && !game">Spiel nicht verfügbar.</p>
+    <div v-else>Spiel nicht verfügbar.</div>
   </div>
 </template>
+
+<style scoped>
+.content {
+  ::v-deep(p) {
+    @apply py-4;
+  }
+
+  ::v-deep(h3) {
+    @apply py-4 text-2xl font-bold;
+  }
+
+  ::v-deep(ul) {
+    @apply list-disc px-8;
+
+    li {
+      @apply py-2;
+    }
+  }
+}
+</style>
