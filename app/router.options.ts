@@ -6,27 +6,27 @@ export default {
       {
         name: 'home',
         path: '/',
-        component: () => import('~/pages/home.vue'),
+        component: () => import('~/pages/home/home.vue'),
       },
       {
         name: 'about',
         path: '/ich',
-        component: () => import('~/pages/about.vue'),
+        component: () => import('~/pages/about/about.vue'),
       },
       {
         name: 'imprint',
         path: '/impressum',
-        component: () => import('~/pages/imprint.vue'),
+        component: () => import('~/pages/imprint/imprint.vue'),
       },
       {
         name: 'privacy',
         path: '/datenschutz',
-        component: () => import('~/pages/privacy.vue'),
+        component: () => import('~/pages/privacy/privacy.vue'),
       },
       {
         name: 'login',
         path: '/login',
-        component: () => import('~/pages/auth/login.vue'),
+        component: () => import('~/pages/auth/login/login.vue'),
       },
       {
         name: 'games',
@@ -73,7 +73,7 @@ export default {
           middleware: ['authenticated'],
           roles: ['admin', 'user'],
         },
-        component: () => import('~/pages/auth/profile.vue'),
+        component: () => import('~/pages/auth/profile/profile.vue'),
       },
     ];
   },

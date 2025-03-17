@@ -41,7 +41,7 @@ const runtimeConfig = useRuntimeConfig();
 <template>
   <section class="py-8 bg-primary">
     <u-container>
-      <nuxt-link to="/">
+      <nuxt-link to="/public">
         <p class="text-center text-3xl sm:text-4xl text-white font-bold tracking-tight pb-2">
           {{ runtimeConfig.public.name }}
         </p>

@@ -14,17 +14,12 @@ export default defineNuxtConfig({
 
   css: ['@/assets/global.css'],
 
-  modules: [
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
-      },
-    ],
-    '@nuxt/eslint',
-    'nuxt-auth-utils',
-    '@nuxt/ui',
-  ],
+  modules: [[
+    '@pinia/nuxt',
+    {
+      autoImports: ['defineStore', 'acceptHMRUpdate'],
+    },
+  ], '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/ui', '@nuxtjs/storybook'],
 
   imports: {
     dirs: ['stores'],

@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <h3 class="title">
-      <slot name="title"></slot>
+      <slot name="title" />
     </h3>
     <div class="icons">
       <slot name="icons" />
