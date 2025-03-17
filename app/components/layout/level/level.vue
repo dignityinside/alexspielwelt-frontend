@@ -1,12 +1,8 @@
 <script setup lang="ts">
-interface Item {
-  heading: string | number;
-  title: string | number;
-  icon?: string;
-}
+import type { LevelItemType } from '~/components/layout/level/level.types';
 
 const props = defineProps<{
-  items: Item[];
+  items: LevelItemType[];
 }>();
 
 function filteredItems() {

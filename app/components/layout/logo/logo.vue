@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { ApiEndpoint } from '~/enums/api-endpoint';
+import type { StatsType } from '~/components/layout/logo/logo.types';
 
 const { data } = await useAPI(ApiEndpoint.STATS);
 
-interface stats {
-  own: number;
-  addons: number;
-  hours: number;
-  games: number;
-}
-
-const stats = data.value as stats;
+const stats = data.value as StatsType;
 
 const items = ref([
   {
