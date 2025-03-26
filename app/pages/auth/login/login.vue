@@ -66,36 +66,61 @@ const togglePasswordVisibility = () => {
 
 <template>
   <u-container>
-    <div class="grid place-items-center">
-      <u-card class="prose">
-        <h1>Anmelden</h1>
+    <div class="login">
+      <h1>Anmelden</h1>
 
-        <u-notifications />
+      <u-notifications />
 
-        <u-form :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-          <u-form-group label="Benutzername" name="username">
-            <u-input v-model="state.username" icon="material-symbols:account-box" />
-          </u-form-group>
+      <u-form :schema="schema" :state="state" class="login__form" @submit="onSubmit">
+        <u-form-group label="Benutzername" name="username">
+          <u-input v-model="state.username" icon="material-symbols:account-box" />
+        </u-form-group>
 
-          <u-form-group label="Password" name="password">
-            <u-input
-              :type="isPasswordVisible ? 'text' : 'password'"
-              v-model="state.password"
-              icon="material-symbols:key"
-            >
-              <template #trailing>
-                <u-icon
-                  :name="isPasswordVisible ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                  @click="togglePasswordVisibility"
-                  class="is-clickable"
-                />
-              </template>
-            </u-input>
-          </u-form-group>
+        <u-form-group label="Password" name="password">
+          <u-input
+            :type="isPasswordVisible ? 'text' : 'password'"
+            v-model="state.password"
+            icon="material-symbols:key"
+          >
+            <template #trailing>
+              <u-icon
+                :name="isPasswordVisible ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                @click="togglePasswordVisibility"
+                class="is-clickable"
+              />
+            </template>
+          </u-input>
+        </u-form-group>
 
+        <div>
           <u-button type="submit" icon="material-symbols:lock-open">Anmelden</u-button>
-        </u-form>
-      </u-card>
+        </div>
+      </u-form>
     </div>
   </u-container>
 </template>
+
+<style lang="css" scoped>
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-white);
+  padding: var(--size-32);
+  text-align: center;
+
+  h1 {
+    font-size: var(--font-size-20);
+    line-height: var(--size-28);
+    text-align: center;
+    font-weight: var(--font-bold);
+    padding-bottom: var(--size-32);
+  }
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-16);
+}
+</style>

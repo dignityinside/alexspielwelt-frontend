@@ -8,7 +8,7 @@ useSeoMeta({
 <template>
   <div>
     <layout-hero>
-      <template #title>#Brettspiele </template>
+      <template #title>#Brettspiele</template>
       <template #subtitle>
         Eine Investition in Brettspiele bringt die größten Renditen – Spaß, Gemeinschaft und
         unvergessliche Momente!
@@ -27,31 +27,31 @@ useSeoMeta({
     </layout-box>
 
     <layout-section>
-      <template #title> Meine Lieblingsdinge ... </template>
+      <template #title>Meine Lieblingsdinge ...</template>
       <template #default>
-        <div class="grid grid-col-2 sm:grid-cols-3 gap-6 py-8">
+        <div class="about__list">
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:users" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:users" /></div>
             Spielabende mit Freunden: Gemeinsam lachen, spielen und unvergessliche Momente schaffen.
           </div>
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:chess" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:chess" /></div>
             Brettspiele spielen – eintauchen, strategieren und gemeinsam Spaß haben!
           </div>
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:magnifying-glass" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:magnifying-glass" /></div>
             Neue Brettspiele entdecken – die perfekte Gelegenheit, den Spielehorizont zu erweitern!
           </div>
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:pizza-slice" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:pizza-slice" /></div>
             Pizza essen – der perfekte Begleiter für einen Spieleabend!
           </div>
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:beer-mug-empty" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:beer-mug-empty" /></div>
             Pepsi trinken – der erfrischende Genuss für jeden Moment!
           </div>
           <div>
-            <div class="text-5xl pb-4"><u-icon name="fa6-solid:plane" /></div>
+            <div class="about__list-icon"><u-icon name="fa6-solid:plane" /></div>
             Die Welt bereisen – der Schlüssel zu einzigartigen Erfahrungen und Erinnerungen.
           </div>
         </div>
@@ -59,7 +59,7 @@ useSeoMeta({
     </layout-section>
 
     <layout-section>
-      <template #title> Meine Lieblingsspiele ... </template>
+      <template #title>Meine Lieblingsspiele ...</template>
       <template #default>
         <p>Meine Lieblingsspiele ...</p>
         <p>… Cashflow</p>
@@ -79,4 +79,25 @@ useSeoMeta({
   </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="css">
+.about__list {
+  display: grid;
+  gap: var(--size-24);
+  padding-top: var(--size-32);
+  padding-bottom: var(--size-32);
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .about__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.about__list-icon {
+  font-size: var(--font-size-48);
+  line-height: var(--size-48);
+  padding-bottom: var(--size-16);
+  color: var(--color-aqua);
+}
+</style>

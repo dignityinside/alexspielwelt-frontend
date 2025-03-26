@@ -22,14 +22,11 @@ onMounted(() => {
 
 <template>
   <teleport to="body">
-    <div
-      class="fixed bottom-0 right-0 z-[1000] max-w-[500px] hidden bg-gray-100 p-5 my-4 mx-4"
-      :class="{ 'is-open': isOpen }"
-    >
+    <div class="cookie-banner" :class="{ 'is-open': isOpen }">
       Ich setze Cookies ein, um dein Erlebnis auf der Website zu verbessern.
-      <div class="flex justify-center gap-2 py-2">
+      <div class="cookie-banner__buttons">
         <div>
-          <u-button @click="acceptCookies">Okay</u-button>
+          <u-button @click="acceptCookies">Ok</u-button>
         </div>
         <div>
           <u-button @click="rejectCookie" color="red">Nein</u-button>
@@ -39,7 +36,27 @@ onMounted(() => {
   </teleport>
 </template>
 
-<style scoped>
+<style scoped lang="css">
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  max-width: 500px;
+  display: none;
+  background: var(--color-white);
+  padding: var(--size-20);
+  margin: var(--size-16);
+}
+
+.cookie-banner__buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--size-8);
+  padding-top: var(--size-8);
+  padding-bottom: var(--size-8);
+}
+
 .is-open {
   display: block;
 }

@@ -9,5 +9,11 @@ defineProps({
 </script>
 
 <template>
-  <u-icon v-if="stars" v-for="n in stars" :key="n" name="fa6-solid:star" class="text-yellow-400" />
+  <u-icon v-if="stars" v-for="n in stars" :key="n" name="fa6-solid:star" class="star" />
 </template>
+
+<style scoped lang="css">
+.star {
+  color: var(--color-golden-yellow);
+}
+</style>

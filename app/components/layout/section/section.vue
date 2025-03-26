@@ -12,22 +12,40 @@
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="css">
 .section {
-  @apply text-center py-8;
+  text-align: center;
+  padding-top: var(--size-16);
+  padding-bottom: var(--size-16);
+  color: var(--color-white);
+}
+
+@media (min-width: 640px) {
+  .section {
+    padding-top: var(--size-32);
+    padding-bottom: var(--size-32);
+  }
 }
 
 .title {
-  @apply text-3xl font-bold pb-4;
+  font-size: var(--font-size-30);
+  line-height: var(--size-36);
+  font-weight: var(--font-bold);
+  padding-bottom: var(--size-16);
 }
 
 .icons {
-  @apply text-5xl text-gray-500 font-bold py-4;
+  font-size: var(--font-size-48);
+  line-height: var(--size-48);
+  font-weight: var(--font-bold);
+  padding-top: var(--size-16);
+  padding-bottom: var(--size-16);
 }
 
 .content {
   ::v-deep(p) {
-    @apply py-3;
+    padding-top: var(--size-12);
+    padding-bottom: var(--size-12);
   }
 }
 </style>

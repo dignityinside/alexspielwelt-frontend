@@ -1,0 +1,50 @@
+:root {
+    /* COLORS */
+
+    --color-deep-purple: #1a002b;
+    --color-deep-indigo: #4b0082;
+    --color-hot-pink: #ff00ff;
+    --color-aqua: #00ffff;
+    --color-golden-yellow: #FACC15;
+    --color-black: #000000;
+    --color-white: #ffffff;
+
+    /* FONT */
+
+    --font-size-18: 1.125rem;
+    --font-size-20: 1.25rem;
+    --font-size-24: 1.5rem;
+    --font-size-30: 1.875rem;
+    --font-size-48: 3rem;
+    --font-bold: 700;
+
+    /* SIZES */
+
+    --size-4: 0.25rem;
+    --size-8: 0.5rem;
+    --size-12: 0.75rem;
+    --size-16: 1rem;
+    --size-20: 1.25rem;
+    --size-24: 1.5rem;
+    --size-28: 1.75rem;
+    --size-32: 2rem;
+    --size-36: 2.25rem;
+    --size-48: 3rem;
+    --size-64: 4rem;
+    --size-96: 6rem;
+}
+
+body {
+    animation: glitchDeepPurpleIndigoBg 5s infinite alternate;
+}
+
+@keyframes glitchDeepPurpleIndigoBg {
+    0% { background: var(--color-deep-purple); }
+    50% { background: var(--color-deep-indigo); }
+    100% { background: var(--color-deep-purple); }
+}
+
+@keyframes glitchAquaHotPinkBg {
+    0% { background: var(--color-aqua); }
+    100% { background: var(--color-hot-pink); }
+}

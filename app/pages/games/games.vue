@@ -118,12 +118,14 @@ const filteredGames = computed(() => {
       </layout-hero>
 
       <template v-if="games && games.length > 0">
-        <section class="bg-gray-100 p-8">
-          <h3 class="text-xl text-center font-bold pb-4">Filter</h3>
+        <section class="filter">
+          <div class="filter__header">
+            <h3 class="filter__title">Filter</h3>
+          </div>
 
           <div>
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-24">
-              <div>
+            <div class="filter__settings">
+              <div class="filter__item">
                 Bewertung:
                 <span v-if="filters.rating > 0">
                   {{ filters.rating }} <ui-stars :stars="Number(filters.rating)" />
@@ -134,11 +136,10 @@ const filteredGames = computed(() => {
                   :max="5"
                   v-model="filters.rating"
                   @input="updateSliderValue"
-                  class="py-6"
                 />
               </div>
 
-              <div>
+              <div class="filter__item">
                 Empfohlenes Alter:
                 <span v-if="filters.recommendedAge > 0">
                   ab {{ filters.recommendedAge }} <u-icon name="fa6-solid:circle-user" />
@@ -149,11 +150,10 @@ const filteredGames = computed(() => {
                   :max="18"
                   v-model="filters.recommendedAge"
                   @input="updateSliderValue"
-                  class="py-6"
                 />
               </div>
 
-              <div>
+              <div class="filter__item">
                 Spieleranzahl:
                 <span v-if="filters.players > 0">
                   ab {{ filters.players }} Spieler <u-icon name="fa6-solid:users" />
@@ -164,11 +164,10 @@ const filteredGames = computed(() => {
                   :max="12"
                   v-model="filters.players"
                   @input="updateSliderValue"
-                  class="py-6"
                 />
               </div>
 
-              <div>
+              <div class="filter__item">
                 Dauer:
                 <span v-if="filters.playTime > 0">
                   bis {{ filters.playTime }} Stunde <u-icon name="fa6-solid:clock" />
@@ -179,11 +178,10 @@ const filteredGames = computed(() => {
                   :max="12"
                   v-model="filters.playTime"
                   @input="updateSliderValue"
-                  class="py-6"
                 />
               </div>
 
-              <div>
+              <div class="filter__item">
                 Komplexität:
                 <span v-if="filters.difficulty > 0">
                   <span v-if="filters.difficulty <= 9">ab</span>
@@ -195,19 +193,16 @@ const filteredGames = computed(() => {
                   :max="10"
                   v-model="filters.difficulty"
                   @input="updateSliderValue"
-                  class="py-6"
                 />
               </div>
             </div>
 
-            <div class="flex justify-center my-4">
-              <div>
-                <u-button @click="clearFilters"> Filter löschen </u-button>
-              </div>
+            <div class="filter__clear">
+              <div class="filter__clear-button" @click="clearFilters">Filter löschen</div>
             </div>
 
-            <div class="flex justify-center">
-              <div class="w-full sm:w-1/3">
+            <div class="filter__search">
+              <div class="filter__search-input">
                 <u-input
                   v-model="filters.searchQuery"
                   name="search"
@@ -228,31 +223,152 @@ const filteredGames = computed(() => {
           </div>
         </section>
 
-        <div
-          v-if="filteredGames.length"
-          class="grid grid-col sm:grid-cols-2 md:grid-cols-4 gap-2 my-8"
-        >
+        <div v-if="filteredGames.length" class="games">
           <div
             v-for="game in filteredGames"
             :key="game.slug"
             @click="openGame(game.slug)"
-            class="game mx-2 my-2"
+            class="game"
           >
-            <img :src="game.img" :alt="game.title" :title="game.title" class="image" />
-            <p>{{ game.title }}</p>
+            <div>
+              <img :src="game.img" :alt="game.title" :title="game.title" class="image" />
+            </div>
+            <div class="game__title">{{ game.title }}</div>
           </div>
         </div>
-        <div v-else class="py-8 text-center">Keine Ergebnisse gefunden.</div>
+        <div v-else class="game__text">Keine Ergebnisse gefunden.</div>
       </template>
-      <div v-else class="py-8 text-center">Keine Spieltipps gefunden.</div>
+      <div v-else class="game__text">Keine Spieltipps gefunden.</div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
+.filter {
+  background: var(--color-deep-purple);
+  border: 2px solid var(--color-hot-pink);
+  padding: var(--size-32);
+  color: var(--color-white);
+}
+
+.filter__header {
+  font-size: var(--font-size-20);
+  line-height: var(--size-28);
+  text-align: center;
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  transform: skew(-25deg);
+  background: var(--color-hot-pink);
+  margin-bottom: var(--size-32);
+}
+
+.filter__title {
+  transform: skew(25deg);
+}
+
+.filter__settings {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: var(--size-12);
+}
+
+.filter__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .filter__settings {
+    flex-direction: row;
+  }
+
+  .filter__item {
+    width: 15%;
+  }
+}
+
+.filter__clear {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--size-32);
+  margin-bottom: var(--size-32);
+}
+
+.filter__clear-button {
+  color: var(--color-hot-pink);
+  border-radius: 10px;
+  border: solid 2px var(--color-hot-pink);
+  padding: var(--size-8) var(--size-32);
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--color-white);
+    border: solid 2px var(--color-white);
+  }
+}
+
+.filter__search {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .filter__search-input {
+    width: 33.3%;
+  }
+}
+
+.games {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--size-32);
+  margin-top: var(--size-32);
+  margin-bottom: var(--size-32);
+}
+
+@media (min-width: 640px) {
+  .games {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--size-24);
+  }
+}
+
+.game {
+  background: var(--color-deep-purple);
+  border: 2px solid var(--color-hot-pink);
+  color: var(--color-white);
+  cursor: pointer;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow: hidden;
+  transition: 0.3s;
+
+  &:hover {
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+}
+
+.game__title {
+  padding: var(--size-16) var(--size-32);
+  text-align: center;
+}
+
+.game__text {
+  padding-top: 2rem /* 32px */;
+  padding-bottom: 2rem /* 32px */;
+  color: var(--color-white);
+}
+
 .image {
-  border-radius: 8px;
   filter: grayscale(0);
+  padding: var(--size-16);
+  overflow: hidden;
 
   transition:
     filter 0.2s,
@@ -261,13 +377,5 @@ const filteredGames = computed(() => {
 
 .image:hover {
   filter: grayscale(100%);
-}
-
-.game {
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 </style>

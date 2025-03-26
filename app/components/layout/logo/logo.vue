@@ -33,18 +33,51 @@ const runtimeConfig = useRuntimeConfig();
 </script>
 
 <template>
-  <section class="py-8 bg-primary">
+  <section>
     <u-container>
-      <nuxt-link to="/public">
-        <p class="text-center text-3xl sm:text-4xl text-white font-bold tracking-tight pb-2">
-          {{ runtimeConfig.public.name }}
+      <div class="logo">
+        <nuxt-link :to="{ name: 'home' }">
+          <p class="logo__text">
+            {{ runtimeConfig.public.name }}
+          </p>
+        </nuxt-link>
+        <p class="logo_slogan">
+          {{ runtimeConfig.public.slogan }}
         </p>
-      </nuxt-link>
-      <p class="text-center text-xl sm:text-xl text-black tracking-tight">
-        {{ runtimeConfig.public.slogan }}
-      </p>
-      <u-divider class="py-8" />
+      </div>
       <layout-level :items="items" />
     </u-container>
   </section>
 </template>
+
+<style lang="css">
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--size-32);
+  padding-bottom: var(--size-32);
+}
+
+.logo__text {
+  font-size: var(--font-size-30);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .logo__text {
+    font-size: var(--font-size-48);
+  }
+}
+
+.logo_slogan {
+  color: var(--color-white);
+}
+</style>

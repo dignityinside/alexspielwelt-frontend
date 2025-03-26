@@ -22,9 +22,9 @@ const runtimeConfig = useRuntimeConfig();
 </script>
 
 <template>
-  <footer class="bg-gray-50 p-16 text-center text-gray-600">
+  <footer class="footer">
     <div>
-      <p class="py-4">© 2024 {{ runtimeConfig.public.name }}</p>
+      <div class="item">© 2024 {{ runtimeConfig.public.name }}</div>
 
       <span>Folge mir gerne auf </span>
       <span> <u-icon name="simple-icons:instagram" /> Instagram </span>
@@ -32,14 +32,35 @@ const runtimeConfig = useRuntimeConfig();
       <span> <u-icon name="simple-icons:threads" /> Threads </span>
       <span>{{ runtimeConfig.public.instagram }} – ich freue mich auf dich!</span>
 
-      <div class="py-4">
+      <div class="item">
         <span v-for="(link, index) in links" :key="'footer-link' + index">
-          <nuxt-link :to="link.to" class="hover:text-gray-400 hover:underline">{{
-            link.name
-          }}</nuxt-link>
+          <nuxt-link :to="link.to" class="link">
+            {{ link.name }}
+          </nuxt-link>
           <span v-if="index < links.length - 1"> | </span>
         </span>
       </div>
     </div>
   </footer>
 </template>
+
+<style scoped lang="css">
+.footer {
+  padding: var(--size-64);
+  text-align: center;
+  color: var(--color-white);
+}
+
+.item {
+  padding-top: var(--size-16);
+  padding-bottom: var(--size-16);
+}
+
+.link {
+  text-decoration-line: underline;
+
+  &:hover {
+    text-decoration-line: none;
+  }
+}
+</style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { loggedIn } = useUserSession();
 const { isAdmin } = useUserRoles();
+import { useRouter } from 'vue-router';
 
 const items = [
   {
@@ -44,17 +45,98 @@ const filteredItems = computed(() =>
 );
 
 const isOpen = ref(false);
+const router = useRouter();
+
+function goTo(name: { name: string }) {
+  router.push(name);
+
+  isOpen.value = false;
+}
 </script>
 
 <template>
-  <u-horizontal-navigation class="hidden sm:flex" :links="filteredItems" :space="4" />
+  <button class="navigation__button" @click="isOpen = !isOpen" aria-label="Menu">
+    <u-icon name="fa6-solid:bars" />
+  </button>
 
-  <div class="sm:hidden">
-    <button class="p-4 bg-gray-100 rounded" @click="isOpen = !isOpen" aria-label="Menu">
-      <u-icon name="fa6-solid:bars"></u-icon>
-    </button>
-    <span v-show="isOpen">
-      <u-vertical-navigation :links="filteredItems" class="py-4" />
-    </span>
-  </div>
+  <nav class="navigation" :class="{ 'navigation--hidden': !isOpen }">
+    <ul>
+      <li v-for="(item, index) in filteredItems" :key="index">
+        <a @click.prevent="goTo(item.to)">{{ item.label }}</a>
+      </li>
+    </ul>
+  </nav>
 </template>
+
+<style scoped lang="css">
+.navigation {
+  margin-bottom: var(--size-24);
+}
+
+.navigation ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  list-style: none;
+  gap: 10px;
+}
+
+.navigation__button {
+  border-radius: var(--size-4);
+  color: var(--color-aqua);
+  border: solid 2px var(--color-aqua);
+  margin-bottom: var(--size-16);
+  width: 100%;
+  padding: var(--size-16);
+}
+
+.navigation--hidden {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .navigation ul {
+    flex-direction: row;
+  }
+
+  .navigation__button {
+    display: none;
+  }
+
+  .navigation--hidden {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.navigation ul li {
+  background: var(--color-deep-purple);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .navigation ul li {
+    position: relative;
+    animation: glitchAquaHotPinkBg 5s infinite alternate;
+    transform: skew(-25deg);
+  }
+}
+
+.navigation ul li a {
+  display: block;
+  padding: var(--size-16) var(--size-32);
+  text-decoration: none;
+  font-size: var(--font-size-18);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .navigation ul li a {
+    transform: skew(25deg);
+    transition: 0.3s;
+  }
+}
+</style>

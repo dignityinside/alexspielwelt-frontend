@@ -60,7 +60,7 @@ const filteredRows = computed(() => {
 
 <template>
   <layout-content>
-    <div class="flex flex-col items-center">
+    <div class="admin">
       <h1>Admin Spieltipps</h1>
 
       <u-link :to="{ name: 'game.add' }">
@@ -68,7 +68,7 @@ const filteredRows = computed(() => {
       </u-link>
     </div>
 
-    <div class="py-8">
+    <div class="admin__filter">
       <u-input v-model="q" placeholder="Filter game..." />
     </div>
 
@@ -92,3 +92,15 @@ const filteredRows = computed(() => {
     </u-table>
   </layout-content>
 </template>
+
+<style scoped lang="css">
+.admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin__filter {
+  padding: var(--size-32) 0;
+}
+</style>

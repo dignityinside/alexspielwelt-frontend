@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <slot name="title"></slot>
 
     <div class="content">
@@ -8,25 +8,42 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
+.content {
+  background: var(--color-white);
+  padding: var(--size-12);
+  word-break: break-word;
+}
+
 ::v-deep(h1) {
-  @apply py-3 text-xl font-bold;
+  padding-top: var(--size-12);
+  padding-bottom: var(--size-12);
+  font-size: var(--font-size-20);
+  line-height: var(--size-28);
+  font-weight: var(--font-bold);
 }
 
 ::v-deep(h3) {
-  @apply py-3 text-lg;
+  padding-top: var(--size-12);
+  padding-bottom: var(--size-12);
+  font-size: var(--font-size-18);
+  line-height: var(--size-28);
 }
 
 .content {
   ::v-deep(p) {
-    @apply py-3;
+    padding-top: var(--size-12);
+    padding-bottom: var(--size-12);
   }
 
   ::v-deep(ul) {
-    @apply list-disc px-8;
+    list-style-type: disc;
+    padding-left: var(--size-32);
+    padding-right: var(--size-32);
 
     li {
-      @apply py-2;
+      padding-top: var(--size-8);
+      padding-bottom: var(--size-8);
     }
   }
 }

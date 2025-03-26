@@ -17,21 +17,23 @@ function redirectToGames() {
         Entdecke die Welt der Brettspiele und finde dein neues Lieblingsspiel.
       </template>
       <template #default>
-        <u-button @click="redirectToGames" size="lg">
+        <div @click="redirectToGames" class="home__games-button">
           Jetzt dein nächstes Brettspiel entdecken
-        </u-button>
+        </div>
       </template>
     </layout-hero>
 
     <layout-section>
       <template #title> Du kennst mich vielleicht aus ... </template>
       <template #icons>
-        <span class="mr-5">
-          <u-icon name="simple-icons:instagram" />
-        </span>
-        <span>
-          <u-icon name="simple-icons:threads" />
-        </span>
+        <div class="home__social-icons">
+          <div>
+            <u-icon name="simple-icons:instagram" />
+          </div>
+          <div>
+            <u-icon name="simple-icons:threads" />
+          </div>
+        </div>
       </template>
     </layout-section>
 
@@ -70,3 +72,26 @@ function redirectToGames() {
     </layout-section>
   </div>
 </template>
+
+<style scoped lang="css">
+.home__games-button {
+  color: var(--color-aqua);
+  border-radius: 10px;
+  border: solid 2px var(--color-aqua);
+  padding: var(--size-8) var(--size-32);
+  cursor: pointer;
+  text-align: center;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--color-white);
+    border: solid 2px var(--color-white);
+  }
+}
+
+.home__social-icons {
+  display: flex;
+  justify-content: center;
+  gap: var(--size-24);
+}
+</style>

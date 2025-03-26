@@ -109,31 +109,31 @@ type Field = {
 
 // Define form fields
 const fields = ref<Field[]>([
-  { name: 'title', label: 'Titel', grid: 'sm:col-span-6', type: 'input' },
-  { name: 'slug', label: 'Slug', grid: 'sm:col-span-2', type: 'input' },
-  { name: 'publisher', label: 'Verlag', grid: 'sm:col-span-2', type: 'input' },
+  { name: 'title', label: 'Titel', grid: 'col-span-4', type: 'input' },
+  { name: 'slug', label: 'Slug', grid: 'col-span-2', type: 'input' },
+  { name: 'publisher', label: 'Verlag', grid: 'col-span-2', type: 'input' },
   {
     name: 'genres',
     label: 'Genres',
-    grid: 'sm:col-span-2',
+    grid: 'col-span-4',
     type: 'multi-select',
     multiSelectOptions: genresOptions.value,
   },
-  { name: 'slogan', label: 'Slogan', grid: 'sm:col-span-12', type: 'input' },
-  { name: 'img', label: 'Bild URL', grid: 'sm:col-span-6', type: 'input' },
-  { name: 'gameDesigner', label: 'Entworfen von', grid: 'sm:col-span-3', type: 'input' },
-  { name: 'releaseYear', label: 'Erstmals veröffentlicht', grid: 'sm:col-span-3', type: 'input' },
-  { name: 'recommendedAge', label: 'Empfohlenes Alter', grid: 'sm:col-span-2', type: 'input' },
-  { name: 'players', label: 'Spieler', grid: 'sm:col-span-2', type: 'input' },
-  { name: 'playTime', label: 'Dauer', grid: 'sm:col-span-2', type: 'input' },
-  { name: 'difficulty', label: 'Komplexität', grid: 'sm:col-span-2', type: 'input' },
-  { name: 'intro', label: 'Intro Text', grid: 'sm:col-span-12', type: 'textarea', rows: 2 },
-  { name: 'description', label: 'Beschreibung', grid: 'sm:col-span-12', type: 'textarea', rows: 5 },
-  { name: 'link', label: 'Amazon Link', grid: 'sm:col-span-6', type: 'input' },
-  { name: 'award', label: 'Auszeichnungen', grid: 'sm:col-span-3', type: 'input' },
-  { name: 'rating', label: 'Bewertung', grid: 'sm:col-span-3', type: 'input' },
-  { name: 'metaTitle', label: 'MetaTitle', grid: 'sm:col-span-6', type: 'input' },
-  { name: 'metaDescription', label: 'MetaDescription', grid: 'sm:col-span-6', type: 'input' },
+  { name: 'slogan', label: 'Slogan', grid: 'col-span-12', type: 'input' },
+  { name: 'img', label: 'Bild URL', grid: 'col-span-6', type: 'input' },
+  { name: 'gameDesigner', label: 'Entworfen von', grid: 'col-span-3', type: 'input' },
+  { name: 'releaseYear', label: 'Erstmals veröffentlicht', grid: 'col-span-3', type: 'input' },
+  { name: 'recommendedAge', label: 'Empfohlenes Alter', grid: 'col-span-2', type: 'input' },
+  { name: 'players', label: 'Spieler', grid: 'col-span-2', type: 'input' },
+  { name: 'playTime', label: 'Dauer', grid: 'col-span-2', type: 'input' },
+  { name: 'difficulty', label: 'Komplexität', grid: 'col-span-2', type: 'input' },
+  { name: 'intro', label: 'Intro Text', grid: 'col-span-12', type: 'textarea', rows: 2 },
+  { name: 'description', label: 'Beschreibung', grid: 'col-span-12', type: 'textarea', rows: 5 },
+  { name: 'link', label: 'Amazon Link', grid: 'col-span-6', type: 'input' },
+  { name: 'award', label: 'Auszeichnungen', grid: 'col-span-3', type: 'input' },
+  { name: 'rating', label: 'Bewertung', grid: 'col-span-3', type: 'input' },
+  { name: 'metaTitle', label: 'MetaTitle', grid: 'col-span-6', type: 'input' },
+  { name: 'metaDescription', label: 'MetaDescription', grid: 'col-span-6', type: 'input' },
   {
     name: 'status',
     label: 'Status',
@@ -149,7 +149,7 @@ const fields = ref<Field[]>([
     <h1>Spieltipp {{ isEdit ? 'bearbeiten' : 'hinzufügen' }}</h1>
 
     <u-form :schema="schema" :state="state" @submit="onSubmit">
-      <div class="grid grid-cols-1 sm:grid-cols-12 gap-6">
+      <div class="grid">
         <div v-for="field in fields" :key="field.name" :class="field.grid" class="col-span-12">
           <u-form-group :label="field.label" :name="field.name">
             <template v-if="field.type === 'input'">
@@ -189,3 +189,65 @@ const fields = ref<Field[]>([
     </u-form>
   </layout-content>
 </template>
+
+<style lang="css" scoped>
+.grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.col-span-12 {
+  grid-column: span 12 / span 12;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--size-24);
+  }
+
+  .col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
+  .col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
+  .col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+
+  .col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+
+  .col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+
+  .col-span-7 {
+    grid-column: span 7 / span 7;
+  }
+
+  .col-span-8 {
+    grid-column: span 8 / span 8;
+  }
+
+  .col-span-9 {
+    grid-column: span 9 / span 9;
+  }
+
+  .col-span-10 {
+    grid-column: span 10 / span 10;
+  }
+
+  .col-span-11 {
+    grid-column: span 11 / span 11;
+  }
+}
+</style>
