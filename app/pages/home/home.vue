@@ -40,7 +40,7 @@ function redirectToGames() {
     <layout-box>
       <template #title> Ich bin Alex, </template>
       <template #default>
-        <p>37 Jahre alt und arbeite als Webentwickler.</p>
+        <p>38 Jahre alt und arbeite als Webentwickler.</p>
         <p>
           Um meinen Kopf freizubekommen, habe ich schon immer gerne Brettspiele gespielt – mal mehr,
           mal weniger.

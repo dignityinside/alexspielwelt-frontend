@@ -274,5 +274,3 @@ const formattedAddress = runtimeConfig.public.address.split(',').join('<br />');
     </p>
   </layout-content>
 </template>
-
-<style scoped></style>
