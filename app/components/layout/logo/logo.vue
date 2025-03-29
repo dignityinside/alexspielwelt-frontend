@@ -9,22 +9,22 @@ const stats = data.value as StatsType;
 const items = ref([
   {
     heading: 'Brettspiele in Besitz',
-    title: stats.own ? stats.own + '+' : 0,
+    title: stats?.own ? stats.own + '+' : 0,
     icon: 'fa6-solid:layer-group',
   },
   {
     heading: 'Erweiterungen in Besitz',
-    title: stats.addons ? stats.addons + '+' : 0,
+    title: stats?.addons ? stats.addons + '+' : 0,
     icon: 'fa6-solid:angles-up',
   },
   {
     heading: 'Gespielte Stunden',
-    title: stats.hours ? stats.hours + '+' : 0,
+    title: stats?.hours ? stats.hours + '+' : 0,
     icon: 'fa6-solid:users',
   },
   {
     heading: 'Rezensionen',
-    title: stats.games ?? 0,
+    title: stats?.games ?? 0,
     icon: 'material-symbols:tips-and-updates',
   },
 ]);
@@ -45,7 +45,7 @@ const runtimeConfig = useRuntimeConfig();
           {{ runtimeConfig.public.slogan }}
         </p>
       </div>
-      <layout-level :items="items" />
+      <layout-level v-if="items" :items="items" />
     </u-container>
   </section>
 </template>
